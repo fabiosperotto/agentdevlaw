@@ -12,6 +12,7 @@ Projeto da tese de doutorado. Usa como modelagem e testes a Lei [7653 de 1988](h
 
 1. Criar projeto com as classes de /src
 2. No classpath do projeto, adicionar .jar externos referente ao framework Jena. Os componentes podem ser encontrados em apache-jena-X.X.X/lib (X -> número da versão). O download do framework pode ser [feito aqui](https://jena.apache.org/download/index.cgi).
+3. É necessário uma ontologia de referência para ser utilizada como base de conhecimento, uma ontologia é fornecida no diretório /bases como exemplo. Pode ser levantado um serviço de consultas SPARQL com o arquivo OWL fornecido (ver Fuseki abaixo).
 
 ### Fuseki
 
