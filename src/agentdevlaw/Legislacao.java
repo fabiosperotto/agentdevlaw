@@ -39,6 +39,9 @@ public class Legislacao {
 	}
 
 
+	/**
+	 * @param debug um inteiro que se for maior que 0 (zero) define o nivel de apuracao de dados na tela
+	 */
 	public void setDebug(int debug) {
 		this.debug = debug;
 	}
@@ -74,6 +77,9 @@ public class Legislacao {
 		return listaNormas;
 	}
 	
+	/**
+	 * @return
+	 */
 	public ArrayList<Lei> getNormasOntologia(){
 	
 		ArrayList<Lei> listaLeis = new ArrayList<Lei>();
@@ -104,16 +110,19 @@ public class Legislacao {
 		
 	}
 	
+	/**
+	 * @return
+	 */
 	public ArrayList<Lei> processaLegislacao() {
 		
-		ArrayList<Lei> listaLeis = this.getNormasOntologia();
+		ArrayList<Lei> listaNormas = this.getNormasOntologia();
+		ArrayList<Lei> listaLeis = new ArrayList<Lei>();
 		
-		for(int i = 0; i < listaLeis.size(); i++ ){
-			System.out.println(listaLeis.get(i).getNorma()+"222");
+		for(int i = 0; i < listaNormas.size(); i++ ){
 			
 			String consultaIndividuosRestricao = "SELECT * WHERE " +
 	        		"{ " +
-	        		"law:"+listaLeis.get(i).getNorma()+" ?p ?o " +
+	        		"law:"+listaNormas.get(i).getNorma()+" ?p ?o " +
 	        		"}";
 	
 	        ResultSet dataSetIndividuos = this.ontologia.consultar(consultaIndividuosRestricao);
@@ -127,6 +136,7 @@ public class Legislacao {
 			    	Resource objeto = this.qs.getResource("o");
 			    	
 			    	if(this.debug > 0) System.out.print("Predicado da norma é '"+recurso.getLocalName()+"'");
+			    	
 			    	String queryPredicadoConceito = 
 			    			"SELECT * WHERE "+
 			    			"{"+
@@ -134,8 +144,10 @@ public class Legislacao {
 			    				"FILTER(?p = rdfs:range) }";
 			    	QuerySolution solucaoDoPredicado  = this.ontologia.consultar(queryPredicadoConceito).next();
 			    	tipoClasse = solucaoDoPredicado.getResource("o");
-			    	listaLeis.get(i).setPredicado(recurso.getLocalName());
-			    	listaLeis.get(i).setIndividuo(objeto.getLocalName());
+			    	Lei lei = new Lei(listaNormas.get(i).getNorma(), listaNormas.get(i).getDescricao());
+			    	lei.setPredicado(recurso.getLocalName());
+			    	lei.setIndividuo(objeto.getLocalName());
+			    	listaLeis.add(lei);
 			    	
 			    	if(this.debug > 0) {
 			    		System.out.print(" que é uma classe do tipo :"+tipoClasse.getLocalName());

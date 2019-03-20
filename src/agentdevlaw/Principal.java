@@ -31,7 +31,14 @@ public class Principal {
 		
 		Legislacao legislacao = new Legislacao(ontologia);
 		legislacao.setDebug(1);
-		ArrayList<Lei> listaNormas = legislacao.processaLegislacao();
+		ArrayList<Lei> leis = legislacao.processaLegislacao();
+		
+		for(int i = 0; i < leis.size(); i++) {
+			System.out.println(leis.get(i).getNorma());
+			System.out.println(leis.get(i).getPredicado());
+			System.out.println(leis.get(i).getIndividuo());
+			System.out.println("###");
+		}
 	
 
 	}
