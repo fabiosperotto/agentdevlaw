@@ -67,13 +67,13 @@ public class Legislacao {
 				"}";
 		
 		ResultSet dataSetNormas = this.ontologia.consultar(consultaNorma);
-        Resource norma = null;
-        Literal comentario;
-        while(dataSetNormas.hasNext()) {
-		    this.qs = dataSetNormas.next();
-		    norma = this.qs.getResource("x");
-		    comentario = this.qs.getLiteral("c");
-		    listaNormas.add(norma);   
+		Resource norma = null;
+		Literal comentario;
+		while(dataSetNormas.hasNext()) {
+			this.qs = dataSetNormas.next();
+			norma = this.qs.getResource("x");
+			comentario = this.qs.getLiteral("c");
+			listaNormas.add(norma);
 		}
 		
 		return listaNormas;
@@ -96,16 +96,16 @@ public class Legislacao {
 				"}";
 		
 		ResultSet dataSetNormas = this.ontologia.consultar(consultaNorma);
-        Resource norma = null;
-        Literal comentario;
-        while(dataSetNormas.hasNext()) {
-		    this.qs = dataSetNormas.next();
-		    norma = this.qs.getResource("x");
-		    comentario = this.qs.getLiteral("c");
-		    listaLeis.add(new Lei(norma.getLocalName(), comentario.toString()));
+		Resource norma = null;
+		Literal comentario;
+		while(dataSetNormas.hasNext()) {
+			this.qs = dataSetNormas.next();
+			norma = this.qs.getResource("x");
+			comentario = this.qs.getLiteral("c");
+			listaLeis.add(new Lei(norma.getLocalName(), comentario.toString()));
 		    
-		    if(this.debug > 0) {
-		    	System.out.println("A norma: "+norma.getLocalName());
+			if(this.debug > 0) {
+				System.out.println("A norma: "+norma.getLocalName());
 				System.out.println("Descreve que: "+WordUtils.wrap(comentario.toString(), 130, "\n", true)+"\n");
 		    }
 			
@@ -132,18 +132,18 @@ public class Legislacao {
 	        		"{ " +
 	        		"law:"+listaNormas.get(i).getNorma()+" ?p ?o " +
 	        		"}";
-	
-	        ResultSet dataSetIndividuos = this.ontologia.consultar(consultaIndividuosRestricao);
-	        Resource tipoClasse = null;
-	        Resource recurso = null;
-	        while(dataSetIndividuos.hasNext()) {
-	        
-			    this.qs = dataSetIndividuos.next();
-			    recurso = this.qs.getResource("p");
-			    if(!recurso.toString().contains("rdf")) { //truque para considerar somente as propriedades relacionadas ao estudo
-			    	Resource objeto = this.qs.getResource("o");
-			    	
-			    	if(this.debug > 0) System.out.print("Predicado da norma é '"+recurso.getLocalName()+"'");
+			
+			ResultSet dataSetIndividuos = this.ontologia.consultar(consultaIndividuosRestricao);
+			Resource tipoClasse = null;
+			Resource recurso = null;
+			while(dataSetIndividuos.hasNext()) {
+				
+				this.qs = dataSetIndividuos.next();
+				recurso = this.qs.getResource("p");
+				if(!recurso.toString().contains("rdf")) { //truque para considerar somente as propriedades relacionadas ao estudo
+					Resource objeto = this.qs.getResource("o");
+					
+					if(this.debug > 0) System.out.print("Predicado da norma é '"+recurso.getLocalName()+"'");
 			    	
 			    	String queryPredicadoConceito = 
 			    			"SELECT * WHERE "+
@@ -159,8 +159,8 @@ public class Legislacao {
 			    	
 			    	if(this.debug > 0) {
 			    		System.out.print(" que é uma classe do tipo :"+tipoClasse.getLocalName());
-				    	System.out.println(" apontando para a instancia: "+objeto.getLocalName());
-				    	System.out.println("Portanto a norma a(ao) "+listaLeis.get(i).getNorma()+ " determina "+tipoClasse.getLocalName()+ " = "+objeto.getLocalName() + "\n");
+			    		System.out.println(" apontando para a instancia: "+objeto.getLocalName());
+			    		System.out.println("Portanto a norma a(ao) "+listaLeis.get(i).getNorma()+ " determina "+tipoClasse.getLocalName()+ " = "+objeto.getLocalName() + "\n");
 			    	}
 			    }		   
 			}
