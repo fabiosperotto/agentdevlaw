@@ -281,8 +281,8 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#artigo27_7653">
         <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#norma"/>
-        <aplica rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5_20_tesouro_nacional"/>
-        <se_pescador rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#equipamentos"/>
+        <aplica rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#multa_5_20"/>
+        <se_pescador rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#perda_equipamentos"/>
         <rdfs:comment xml:lang="pt">§ 4º Fica proibido pescar no período em que ocorre a piracema, de 1º de outubro a 30 de janeiro, nos cursos d&apos;água ou em água parada ou mar territorial, no período em que tem lugar a desova e/ou a reprodução dos peixes.</rdfs:comment>
     </owl:NamedIndividual>
     
@@ -312,14 +312,6 @@
     
 
 
-    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#equipamentos -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#equipamentos">
-        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#apreensao"/>
-    </owl:NamedIndividual>
-    
-
-
     <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#mar_territorial -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#mar_territorial">
@@ -328,10 +320,27 @@
     
 
 
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#multa_5_20 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#multa_5_20">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#multa"/>
+        <rdfs:comment>multa de 5 (cinco) a 20 (vinte) Obrigações do Tesouro Nacional - OTN</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#peixe -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#peixe">
         <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#naoMaterial"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#perda_equipamentos -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#perda_equipamentos">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#apreensao"/>
     </owl:NamedIndividual>
     
 
@@ -372,15 +381,6 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#senador1">
         <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#legislador"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5_20_tesouro_nacional -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5_20_tesouro_nacional">
-        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#multa"/>
-        <rdfs:comment xml:lang="pt">multa de 5 (cinco) a 20 (vinte) Obrigações do Tesouro Nacional - OTN</rdfs:comment>
     </owl:NamedIndividual>
 </rdf:RDF>
 
