@@ -54,7 +54,7 @@ public class Legislacao {
 	
 	/** 
 	 * Realiza pesquisa SPARQL na ontologia relatando todas as intancias de normas com a propriedade de comentario 
-	 * (texto descritivo da norma)
+	 * (texto descritivo da norma).
 	 * @return ArrayList<Resource> contendo conjunto de normas como recurso da ontologia
 	 */
 	public ArrayList<Resource> getNormasOntologiaResource(){
@@ -83,17 +83,12 @@ public class Legislacao {
 	/**
 	 * Realiza pesquisa SPARQL na ontologia relatando todas as intancias de normas com a propriedade de comentario 
 	 * (texto descritivo da norma). Neste metodo o retorno e uma lista com objetos Lei.
+	 * @param consultaNorma String contendo a query SPARQL pronta para ser executada e buscar normas
 	 * @return ArrayList<Lei> lista de leis contendo informacoes completas de predicados e individuos de cada lei
 	 */
-	public ArrayList<Lei> getNormasOntologia(){
+	public ArrayList<Lei> getNormasOntologia(String consultaNorma){
 	
 		ArrayList<Lei> listaLeis = new ArrayList<Lei>();
-		
-		String consultaNorma = 
-				"SELECT ?x ?c WHERE {" + 
-				"	?x rdf:type law:norma ." +
-				"	?x rdfs:comment ?c" +
-				"}";
 		
 		ResultSet dataSetNormas = this.ontologia.consultar(consultaNorma);
 		Resource norma = null;
@@ -117,13 +112,15 @@ public class Legislacao {
 	
 	
 	/**
-	 * Realiza consultas SPARQL a fim de recuperar os predicados e individuos (instancias) relacionadas que regram 
-	 * determinada norma, constituindo neste sentido a lei para o sistema.
+	 * Realiza o processamento necessario, com consultas SPARQL na ontologia, a fim de recuperar os predicados e 
+	 * individuos (instancias) relacionados que regram determinada norma, constituindo neste sentido a lei para o 
+	 * sistema.
+	 * @param consulta String contendo a query SPARQL pronta para ser executada e buscar normas
 	 * @return ArrayList<Lei> contendo todas as formalizacoes encontradas
 	 */
-	public ArrayList<Lei> processaLegislacao() {
+	public ArrayList<Lei> processamentoLegal(String consulta) {
 		
-		ArrayList<Lei> listaNormas = this.getNormasOntologia();
+		ArrayList<Lei> listaNormas = this.getNormasOntologia(consulta);
 		ArrayList<Lei> listaLeis = new ArrayList<Lei>();
 		
 		for(int i = 0; i < listaNormas.size(); i++ ){
@@ -168,5 +165,61 @@ public class Legislacao {
 
 		return listaLeis;
 	}
+	
+	/**
+	 * Realiza a montagem da query que busca normas na ontologia
+	 * @return String com a query pronta para ser executada
+	 */
+	public String queryConsultaNorma() {
+		
+		String consulta = 
+				"SELECT ?x ?c WHERE {" + 
+				"	?x rdf:type law:norma ." +
+				"	?x rdfs:comment ?c" +
+				"}";
+		return consulta;
+		
+	}
+	
+	/**
+	 * Realiza a montagem da query que busca normas na ontologia
+	 * @param filtro String contendo um termo a ser pesquisada por expressao regular na descricao da norma na ontologia
+	 * @return String com a query pronta para ser executada
+	 */
+	public String queryConsultaNorma(String filtro) {
+		
+		String consulta = 
+				"SELECT ?x ?c WHERE {" + 
+				"	?x rdf:type law:norma ." +
+				"	?x rdfs:comment ?c ." +
+				"	FILTER regex(?c, \""+filtro+"\", \"i\")" +
+				"}";
+		return consulta;
+		
+	}
+	
+	
+	/**
+	 * Metodo inicial para realizar o carregamento de leis da ontologia para objetos Java
+	 * @return ArrayList<Lei> contendo objetos do tipo Lei que armazenam dados da norma, predicados e individuos relacionados 
+	 */
+	public ArrayList<Lei> carregaLegislacao() {
+		
+		String consulta = this.queryConsultaNorma();
+		return this.processamentoLegal(consulta);
+	}
+	
 
+	/**
+	 * Metodo inicial para realizar o carregamento de leis da ontologia para objetos Java
+	 * @param acao String com a expressao para ser utilizada como filtro na consulta SPARQL de normas
+	 * @return ArrayList<Lei> contendo objetos do tipo Lei que armazenam dados da norma, predicados e individuos relacionados
+	 */
+	public ArrayList<Lei> carregaLegislacao(String acao) {
+	
+		String consulta = this.queryConsultaNorma(acao);
+		return this.processamentoLegal(consulta);
+	}
+	
+	
 }

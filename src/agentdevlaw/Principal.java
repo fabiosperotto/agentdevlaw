@@ -11,7 +11,7 @@ public class Principal {
 		
 		Legislacao legislacao = new Legislacao(ontologia);
 		legislacao.setDebug(1);
-		ArrayList<Lei> leis = legislacao.processaLegislacao();
+		ArrayList<Lei> leis = legislacao.carregaLegislacao("pescar");
 		
 		for(int i = 0; i < leis.size(); i++) {
 			System.out.println(leis.get(i).getNorma());

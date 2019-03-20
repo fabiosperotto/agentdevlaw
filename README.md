@@ -1,11 +1,12 @@
 ## AgendDevLaw
 
-Projeto da tese de doutorado.
+Projeto da tese de doutorado. Usa como modelagem e testes a Lei [7653 de 1988](http://www.planalto.gov.br/Ccivil_03/leis/L7653.htm) sobre pescaria na época de reprodução de peixes.
 
 ### Funcionalidades
 
-- COnexão com um webservice SPARQL onde pode realizar consultas na ontologia a fim de buscar normas
+- Conexão com um webservice SPARQL onde pode realizar consultas na ontologia a fim de buscar normas
 - Fornece métodos para encontrar instâncias de normas, predicados e indivíduos, que explicam as restrições de uma legislação (detalhes futuros em desenvolvimento na tese, posteriormente serão fornecidos em uma Wiki).
+- Considera alguma ação externa como filtro das consultas de normas a fim de filtrar normas relacionadas com a atividade.
 
 ### Instalação para desenvolvimento
 
