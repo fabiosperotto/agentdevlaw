@@ -52,8 +52,10 @@ public class Legislacao {
 	}
 	
 	
-	/**
-	 * @return
+	/** 
+	 * Realiza pesquisa SPARQL na ontologia relatando todas as intancias de normas com a propriedade de comentario 
+	 * (texto descritivo da norma)
+	 * @return ArrayList<Resource> contendo conjunto de normas como recurso da ontologia
 	 */
 	public ArrayList<Resource> getNormasOntologiaResource(){
 		ArrayList<Resource> listaNormas = new ArrayList<Resource>();
@@ -77,8 +79,11 @@ public class Legislacao {
 		return listaNormas;
 	}
 	
+	
 	/**
-	 * @return
+	 * Realiza pesquisa SPARQL na ontologia relatando todas as intancias de normas com a propriedade de comentario 
+	 * (texto descritivo da norma). Neste metodo o retorno e uma lista com objetos Lei.
+	 * @return ArrayList<Lei> lista de leis contendo informacoes completas de predicados e individuos de cada lei
 	 */
 	public ArrayList<Lei> getNormasOntologia(){
 	
@@ -110,8 +115,11 @@ public class Legislacao {
 		
 	}
 	
+	
 	/**
-	 * @return
+	 * Realiza consultas SPARQL a fim de recuperar os predicados e individuos (instancias) relacionadas que regram 
+	 * determinada norma, constituindo neste sentido a lei para o sistema.
+	 * @return ArrayList<Lei> contendo todas as formalizacoes encontradas
 	 */
 	public ArrayList<Lei> processaLegislacao() {
 		

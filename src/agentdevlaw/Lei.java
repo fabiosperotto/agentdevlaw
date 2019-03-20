@@ -1,5 +1,13 @@
 package agentdevlaw;
 
+
+/**
+ * A classe Lei é em um sentido da norma da ontologia processada onde possuimos em um objeto as descricoes de cada norma. 
+ * Podendo ja ter armazenado previamente, para cada instancia de norma, os predicados e individuso relacionados, sem a 
+ * necessidade de retornar a realizar novas consultas à ontologia.
+ * @author fabiosperotto
+ *
+ */
 public class Lei {
 	
 	private String norma;

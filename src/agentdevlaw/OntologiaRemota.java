@@ -13,6 +13,11 @@ public class OntologiaRemota {
 			"PREFIX owl: <http://www.w3.org/2002/07/owl#>" +
 			"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>";
 	
+	/**
+	 * Construtor da classe OntologiaRemota
+	 * @param end String com a url do endpoint, ou webservice onde fornece a ontologia OWL/RDF
+	 * @param url String url base registrada para a ontologia, cada conceito possui uma URL base, necessaria para as consultas SPARQL
+	 */
 	public OntologiaRemota(String end, String url) {
 		this.endpoint = end;
 		this.uriBase = url;
