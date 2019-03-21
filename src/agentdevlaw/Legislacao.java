@@ -127,38 +127,44 @@ public class Legislacao {
 			
 			String consultaIndividuosRestricao = "SELECT * WHERE " +
 	        		"{ " +
-	        		"law:"+listaNormas.get(i).getNorma()+" ?p ?o " +
+	        		"law:"+listaNormas.get(i).getNorma()+" ?p ?o . " +
+	        		"FILTER(?p != rdf:type && ?p != rdfs:comment) " +
 	        		"}";
-			
 			ResultSet dataSetIndividuos = this.ontologia.consultar(consultaIndividuosRestricao);
 			Resource tipoClasse = null;
-			Resource recurso = null;
+			Resource predicado = null;
+			String predicadoAnterior = "";
+			QuerySolution solucaoDoPredicado = null;
+			
 			while(dataSetIndividuos.hasNext()) {
 				
 				this.qs = dataSetIndividuos.next();
-				recurso = this.qs.getResource("p");
-				if(!recurso.toString().contains("rdf")) { //truque para considerar somente as propriedades relacionadas ao estudo
-					Resource objeto = this.qs.getResource("o");
+				predicado = this.qs.getResource("p");
+				Resource objeto = this.qs.getResource("o");
 					
-					if(this.debug > 0) System.out.print("Predicado da norma é '"+recurso.getLocalName()+"'");
-			    	
-			    	String queryPredicadoConceito = 
-			    			"SELECT * WHERE "+
-			    			"{"+
-			    				"<"+recurso+"> ?p ?o ." +
-			    				"FILTER(?p = rdfs:range) }";
-			    	QuerySolution solucaoDoPredicado  = this.ontologia.consultar(queryPredicadoConceito).next();
+				if(this.debug > 0) System.out.print("Predicado da norma é '"+predicado.getLocalName()+"'");
+			    
+				if(!predicado.getLocalName().equals(predicadoAnterior)) {
+					predicadoAnterior = predicado.getLocalName();
+					String queryPredicadoConceito = 
+				   			"SELECT * WHERE "+
+				   			"{"+
+				   				"law:"+predicado.getLocalName()+" ?p ?o ." +
+				   				"FILTER(?p = rdfs:range) }";
+			    	solucaoDoPredicado = this.ontologia.consultar(queryPredicadoConceito).next();
 			    	tipoClasse = solucaoDoPredicado.getResource("o");
-			    	Lei lei = new Lei(listaNormas.get(i).getNorma(), listaNormas.get(i).getDescricao());
-			    	lei.setPredicado(recurso.getLocalName());
-			    	lei.setIndividuo(objeto.getLocalName());
-			    	listaLeis.add(lei);
+					
+				}
+			    
+			    Lei lei = new Lei(listaNormas.get(i).getNorma(), listaNormas.get(i).getDescricao());
+			   	lei.setPredicado(predicado.getLocalName());
+			   	lei.setIndividuo(objeto.getLocalName());
+			   	listaLeis.add(lei);
 			    	
-			    	if(this.debug > 0) {
-			    		System.out.print(" que é uma classe do tipo :"+tipoClasse.getLocalName());
-			    		System.out.println(" apontando para a instancia: "+objeto.getLocalName());
-			    		System.out.println("Portanto a norma a(ao) "+listaLeis.get(i).getNorma()+ " determina "+tipoClasse.getLocalName()+ " = "+objeto.getLocalName() + "\n");
-			    	}
+			   	if(this.debug > 0) {
+		    		System.out.print(" que é uma classe do tipo :"+tipoClasse.getLocalName());
+		    		System.out.println(" apontando para a instancia: "+objeto.getLocalName());
+			    	System.out.println("Portanto a norma a(ao) "+listaLeis.get(i).getNorma()+ " determina "+tipoClasse.getLocalName()+ " = "+objeto.getLocalName() + "\n");
 			    }		   
 			}
 		}

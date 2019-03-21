@@ -11,8 +11,8 @@ public class Principal {
 		
 		Legislacao legislacao = new Legislacao(ontologia);
 		legislacao.setDebug(1);
-		ArrayList<Lei> leis = legislacao.carregaLegislacao("pescar");
-		
+		ArrayList<Lei> leis = legislacao.carregaLegislacao("pescar"); //parametro opcional, busca por acoes como "pescar"
+		//caso nao informar parametro opcional acima, retorna todos as normas que existirem na base
 		for(int i = 0; i < leis.size(); i++) {
 			System.out.println(leis.get(i).getNorma());
 			System.out.println(leis.get(i).getPredicado());
