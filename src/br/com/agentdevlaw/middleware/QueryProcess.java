@@ -99,7 +99,7 @@ public class QueryProcess {
 		if(this.debug > 0) System.out.println("### \nSearching in all laws for action '" + action + "'\n###\n");
 		String query = this.modelLegislationQuery(action);
 		
-		ResultSet dataSet = this.ontology.run(query);
+		ResultSet dataSet = this.ontology.setup(query);
 		Resource legislation = null;
 		Literal ends = null;
 		XSDDateTime initialDate, finalDate = null;

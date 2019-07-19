@@ -12,6 +12,7 @@ public class Examples {
 	public static void main(String[] args){
 		
 		OntologyConfigurator ontology = new OntologyConfigurator("http://localhost:3030/ds/query", "http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw");
+		ontology.setOrigin(OntologyConfigurator.SERVER);
 		
 		QueryProcess middleware = new QueryProcess(ontology);
 		middleware.setDebug(1);
