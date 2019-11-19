@@ -3,14 +3,10 @@ package br.com.agentdevlaw.legislation;
 import java.util.List;
 
 /**
- * A classe Lei é em um sentido da norma da ontologia processada onde possuimos
- * em um objeto as descricoes de cada norma. Podendo ja ter armazenado
- * previamente, para cada instancia de norma, os predicados e individuso
- * relacionados, sem a necessidade de retornar a realizar novas consultas à
- * ontologia.
+ * The Law class has the descriptions of each norm. Having previously stored, 
+ * for each instance of the norm, the predicates and related individuals, without 
+ * the need to make new queries to the ontology.
  * 
- * @author fabiosperotto
- *
  */
 public class Law {
 

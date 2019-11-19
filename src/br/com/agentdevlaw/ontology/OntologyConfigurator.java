@@ -1,5 +1,11 @@
 package br.com.agentdevlaw.ontology;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Properties;
+
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.ResultSet;
@@ -28,15 +34,21 @@ public class OntologyConfigurator {
 	private int origin = SERVER;
 	
 	
-	/**
-	 * Construtor da classe OntologiaRemota
-	 * @param end String com a url do endpoint, ou webservice onde fornece a ontologia OWL/RDF
-	 * @param url String url base registrada para a ontologia, cada conceito possui uma URL base, necessaria para as consultas SPARQL
-	 */
-	public OntologyConfigurator(String end, String url) {
-		this.endpoint = end;
-		this.uriBase = url;
-		this.queryPrefix += "PREFIX law: <"+this.uriBase+"#>";
+	public OntologyConfigurator() {
+		
+		try(InputStream input = new FileInputStream("src/config.properties")){
+			Properties prop = new Properties();
+			prop.load(input);
+			this.endpoint = prop.getProperty("onto.endpoint");
+			this.uriBase = prop.getProperty("onto.base_uri");
+			this.queryPrefix += "PREFIX law: <"+this.uriBase+"#>";
+			
+		}catch(IOException ex) {
+			System.out.println("config.properties file not found or without the correct onto.endpoint/onto.base_uri values");
+			System.exit(0);
+		}
+		
+		
 	}
 
 	public String getUriBase() {
@@ -75,19 +87,38 @@ public class OntologyConfigurator {
 		this.origin = origin;
 	}
 	
-	
+	/**
+	 * This will prepare the connection with a ontology origins (web or from file).
+	 * @param queryString required string to be executed
+	 * @return
+	 */
 	private  QueryExecution QueryExecutionFabricator(String queryString) {
 		
 		QueryExecution query = null;
 		
 		if(this.origin == SERVER) {
-			query = QueryExecutionFactory.sparqlService(this.endpoint, this.queryPrefix + queryString);
+				
+			try { 
+				new URL(this.endpoint).toURI(); 
+		        query = QueryExecutionFactory.sparqlService(this.endpoint, this.queryPrefix + queryString);
+		             
+		    }catch (Exception e) { 
+		    	System.out.println(e.getMessage());
+		    	System.out.println("check your endpoint by a valid URL in config.properties");
+		    	System.exit(0);
+		    } 
 		}
-		
-		if(this.origin == MODEL) {
 			
-			Model model = FileManager.get().loadModel(this.endpoint);
-			query = QueryExecutionFactory.create(this.queryPrefix + queryString, model);
+		if(this.origin == MODEL) {
+	
+			try{
+				Model model = FileManager.get().loadModel(this.endpoint);
+				query = QueryExecutionFactory.create(this.queryPrefix + queryString, model);
+			}catch (Exception e) {
+				System.out.println(e.getMessage() + ", check your config.properties");
+				System.exit(0);
+			}
+			
 		}
 		
 		return query;

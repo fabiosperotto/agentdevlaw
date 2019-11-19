@@ -2,8 +2,8 @@
 <rdf:RDF xmlns="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#"
      xml:base="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw"
      xmlns:law="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#"
-     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
@@ -42,6 +42,7 @@
     <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#apply -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#apply">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#publishedBy"/>
         <rdfs:domain rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Obligation"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Permission"/>
@@ -70,6 +71,14 @@
     
 
 
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#publishedBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#publishedBy">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#regulate -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#regulate">
@@ -85,6 +94,12 @@
         <rdfs:domain rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Role"/>
     </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#ruledBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#ruledBy"/>
     
 
 
@@ -361,35 +376,10 @@
     
 
 
-    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#article27_4_line-a -->
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#allRoles -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#article27_4_line-a">
-        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
-        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#activity-suspension_30-90"/>
-        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#pay-a-fine-5-20"/>
-        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#professional-fisherman"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#article27_4_line-b -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#article27_4_line-b">
-        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
-        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#activity-suspension_30-60"/>
-        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#pay-a-fine_100-500"/>
-        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#company"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#article27_4_line-c -->
-
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#article27_4_line-c">
-        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
-        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#equipment-loss"/>
-        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#pay-a-fine_20-80"/>
-        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#fisherman"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#allRoles">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Role"/>
     </owl:NamedIndividual>
     
 
@@ -398,6 +388,26 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#company">
         <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#SocialAgent"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#detention-1_3 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#detention-1_3">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Confinement"/>
+        <max_jail rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</max_jail>
+        <min_jail rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</min_jail>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#detention-2_5 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#detention-2_5">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Confinement"/>
+        <max_jail rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</max_jail>
+        <min_jail rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</min_jail>
     </owl:NamedIndividual>
     
 
@@ -442,16 +452,77 @@
     
 
 
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#hunter -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#hunter">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#SocialAgent"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#law-5197_article18_0 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#law-5197_article18_0">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Legislation"/>
+        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5197_article18"/>
+        <starts_at rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1988-02-12T00:00:00</starts_at>
+        <rdfs:comment>Art. 18. Exports of raw amphibian and reptile skins and hides abroad are prohibited.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#law-5197_article1_0 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#law-5197_article1_0">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Legislation"/>
+        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article1_par-1"/>
+        <starts_at rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1988-02-12T00:00:00</starts_at>
+        <rdfs:comment>Animals of any species, at any stage of their development and living naturally out of captivity, constituting the wildlife, as well as their nests, shelters and natural breeding grounds are State property, and their use, pursuit, destruction, hunting are prohibited or catch it.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#law-5197_article3_0 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#law-5197_article3_0">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Legislation"/>
+        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5197_article3_par-1"/>
+        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5197_article3_par-2"/>
+        <starts_at rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1988-02-12T00:00:00</starts_at>
+        <rdfs:comment>Art. 3º The trade in wildlife specimens and products and objects that entail hunting, stalking, destroying or harvesting is prohibited.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#law-7653_article27_2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#law-7653_article27_2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Legislation"/>
+        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_par-2"/>
+        <starts_at rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">1988-02-12T00:00:00</starts_at>
+        <rdfs:comment>§ 2º The penalty provided for in the caput of this article is the one who causes, through the direct or indirect use of pesticides or any other chemical substance, the perishing of specimens of the ichthyological fauna existing in rivers, lakes, ponds, bays or Brazilian territorial sea.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#law-7653_article27_4 -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#law-7653_article27_4">
         <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Legislation"/>
-        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#article27_4_line-a"/>
-        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#article27_4_line-b"/>
-        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#article27_4_line-c"/>
+        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_4_line-a"/>
+        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_4_line-b"/>
+        <specifiedBy rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_4_line-c"/>
         <ends_at rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2020-01-30T23:59:59</ends_at>
         <starts_at rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2019-10-01T23:59:59</starts_at>
         <rdfs:comment>§ 4º It is forbidden to fish during the period when a piracema occurs, from October 1 to January 30, in its water courses or video territorial sea or, during the period in which a spawning and/or a procreation of the fish takes place</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#license -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#license">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Permission"/>
     </owl:NamedIndividual>
     
 
@@ -520,9 +591,115 @@
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#territorial_sea">
         <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Place"/>
     </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5197_article18 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5197_article18">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#detention-2_5"/>
+        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#allRoles"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5197_article3_par-1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5197_article3_par-1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#detention-2_5"/>
+        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#allRoles"/>
+        <rdfs:comment>§ 1º Except for legalized specimens.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5197_article3_par-2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#5197_article3_par-2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#license"/>
+        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#allRoles"/>
+        <rdfs:comment>§ 2º The harvesting of eggs, mines and chicks intended for the abovementioned establishments, as well as the destruction of wild animals considered harmful to agriculture or public health, shall be permitted under license from the competent authority.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article1_par-1 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article1_par-1">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#detention-1_3"/>
+        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#allRoles"/>
+        <rdfs:comment>It is considered a crime punishable by the penalty of imprisonment from 1 (one) to 3 (three) years for violation of the provisions of article 1.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_4_line-a -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_4_line-a">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#activity-suspension_30-90"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#pay-a-fine-5-20"/>
+        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#professional-fisherman"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_4_line-b -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_4_line-b">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#activity-suspension_30-60"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#pay-a-fine_100-500"/>
+        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#company"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_4_line-c -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_4_line-c">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#equipment-loss"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#pay-a-fine_20-80"/>
+        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#fisherman"/>
+        <rdfs:comment>c) if an amateur fisherman, a fine of 20 (twenty) to 80 (eighty) National Treasury Obligations - OTN and loss of all instruments and equipment used in the fishery.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_par-2 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#7653_article27_par-2">
+        <rdf:type rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Norm"/>
+        <apply rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#detention-2_5"/>
+        <relates rdf:resource="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#allRoles"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Confinement"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#PayAFine"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/fsp/ontologies/2018/11/agentdevlaw#Seizure"/>
+        </owl:members>
+    </rdf:Description>
 </rdf:RDF>
 
 
 
-<!-- Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi -->
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
 
