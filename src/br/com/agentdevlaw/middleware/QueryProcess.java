@@ -76,12 +76,17 @@ public class QueryProcess {
 	
 	/**
 	 * Builds the intended query related to the base ontology model (has particularities from model)
-	 * @param actionFilter String with a expression to filter among many laws
+	 * @param actionFilter String with a expression to filter among many laws]
+	 * @param agentRole string with the agent type (provide empty string if this doesn't matter
 	 * @return String with query structured
 	 */
-	private String modelLegislationQuery(String actionFilter) {
+	private String modelLegislationQuery(String actionFilter, String agentRole) {
 		
 		String now = this.dateSchemaNow();
+		String agentRoleFilter = "FILTER(?roles = law:allRoles) .";
+		if(!agentRole.isEmpty()) {
+			agentRoleFilter = "FILTER(?roles = law:" + agentRole + " || ?roles = law:allRoles) .";
+		}
 		 
 		return "SELECT * " + 
 			"WHERE {  " + 
@@ -101,7 +106,7 @@ public class QueryProcess {
 			"			FILTER(\"" + now + "\"^^xsd:dateTime >= ?starts_at && \"" + now + "\"^^xsd:dateTime < ?ends_at ) . " + 
 			" 		}  " + 
 			"	FILTER regex(?c, \""+actionFilter+"\", \"i\") . " + 
-			"	FILTER(?roles = law:fisherman) . " + 
+				agentRoleFilter +
 			"	FILTER(?p = law:specifiedBy) . " + 
 			"	FILTER(?type != owl:NamedIndividual) . " + 
 			" } ";
@@ -111,12 +116,13 @@ public class QueryProcess {
 	/**
 	 * This method build a list of laws related to an action agent
 	 * @param action string with agent action to filter in ontology inside description laws
+	 * @param role string with the agent type (provide empty string if this doesn't matter
 	 * @return List<Law>
 	 */
-	public List<Law> searchAction(String action) {
+	public List<Law> searchAction(String action, String role) {
 		
-		if(this.debug > 0) System.out.println("### \nSearching in all laws for action '" + action + "'\n###\n");
-		String query = this.modelLegislationQuery(action);
+		if(this.debug > 0) System.out.println("### \nSearching in all laws for action '" + action + " for the agent type " + role + "'\n###\n");
+		String query = this.modelLegislationQuery(action, role);
 		
 		ResultSet dataSet = this.ontology.setup(query);
 		Resource legislation = null;

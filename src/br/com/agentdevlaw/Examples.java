@@ -19,7 +19,7 @@ public class Examples {
 		
 		String action = "fish";
 		
-		List<Law> laws =  middleware.searchAction(action);
+		List<Law> laws =  middleware.searchAction(action, "fisherman");
 		
 		if(laws.isEmpty()) {
 			System.out.println("Theres no results for agent action '" + action + "'");
