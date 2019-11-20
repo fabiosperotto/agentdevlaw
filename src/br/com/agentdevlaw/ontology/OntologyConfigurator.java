@@ -45,7 +45,6 @@ public class OntologyConfigurator {
 			
 		}catch(IOException ex) {
 			System.out.println("config.properties file not found or without the correct onto.endpoint/onto.base_uri values");
-			System.exit(0);
 		}
 		
 		
@@ -103,9 +102,8 @@ public class OntologyConfigurator {
 		        query = QueryExecutionFactory.sparqlService(this.endpoint, this.queryPrefix + queryString);
 		             
 		    }catch (Exception e) { 
-		    	System.out.println(e.getMessage());
 		    	System.out.println("check your endpoint by a valid URL in config.properties");
-		    	System.exit(0);
+		    	return null;
 		    } 
 		}
 			
@@ -116,7 +114,7 @@ public class OntologyConfigurator {
 				query = QueryExecutionFactory.create(this.queryPrefix + queryString, model);
 			}catch (Exception e) {
 				System.out.println(e.getMessage() + ", check your config.properties");
-				System.exit(0);
+				return null;
 			}
 			
 		}
