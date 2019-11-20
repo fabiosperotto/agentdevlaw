@@ -1,5 +1,8 @@
 package br.com.agentdevlaw.middleware;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +60,19 @@ public class QueryProcess {
 		this.ontology = ontologia;
 	}
 	
+	/**
+	 * It's necessary use only dates accepted in xsd schema (supported by OWL/RDF ontologies), 
+	 * this function returns the present datetime in xsd format.
+	 * @return
+	 */
+	protected String dateSchemaNow() {
+		LocalDateTime date = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String now = date.format(formatter);
+		now = now.replace(" ", "T");
+		return now;
+	}
+	
 	
 	/**
 	 * Builds the intended query related to the base ontology model (has particularities from model)
@@ -64,6 +80,9 @@ public class QueryProcess {
 	 * @return String with query structured
 	 */
 	private String modelLegislationQuery(String actionFilter) {
+		
+		String now = this.dateSchemaNow();
+		 
 		return "SELECT * " + 
 			"WHERE {  " + 
 			"	{   " + 
@@ -71,7 +90,7 @@ public class QueryProcess {
 			"    	?law rdfs:comment ?c . " + 
 			"    	?law law:starts_at ?starts_at. " + 
 			"    	OPTIONAL { ?law law:ends_at ?ends_at } . " + 
-			"   		FILTER(\"2019-11-18T16:50:00\"^^xsd:dateTime >= ?starts_at ) . " + 
+			"   		FILTER(\""+ now +"\"^^xsd:dateTime >= ?starts_at ) . " + 
 			"    	?law ?p ?line . " + 
 			"    	?line law:apply ?consequences . " + 
 			"    	?line law:relates ?roles . " + 
@@ -79,7 +98,7 @@ public class QueryProcess {
 			"	} " + 
 			"		UNION { " + 
 			"			?law law:ends_at ?ends_at . " + 
-			"			FILTER(\"2019-11-18T16:50:00\"^^xsd:dateTime >= ?starts_at && \"2019-11-18T16:50:00\"^^xsd:dateTime < ?ends_at ) . " + 
+			"			FILTER(\"" + now + "\"^^xsd:dateTime >= ?starts_at && \"" + now + "\"^^xsd:dateTime < ?ends_at ) . " + 
 			" 		}  " + 
 			"	FILTER regex(?c, \""+actionFilter+"\", \"i\") . " + 
 			"	FILTER(?roles = law:fisherman) . " + 
