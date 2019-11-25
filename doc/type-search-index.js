@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"br.com.agentdevlaw","l":"Examples"},{"p":"br.com.agentdevlaw.legislation","l":"Law"},{"p":"br.com.agentdevlaw.legislation","l":"Norm"},{"p":"br.com.agentdevlaw.ontology","l":"OntologyConfigurator"},{"p":"br.com.agentdevlaw.middleware","l":"QueryProcess"}]

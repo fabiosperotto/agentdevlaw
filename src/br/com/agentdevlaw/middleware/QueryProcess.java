@@ -116,7 +116,7 @@ public class QueryProcess {
 	 * This method build a list of laws related to an action agent
 	 * @param action string with agent action to filter in ontology inside description laws
 	 * @param role string with the agent type (provide empty string if this doesn't matter
-	 * @return List<Law>
+	 * @return List list of laws found in ontology
 	 */
 	public List<Law> searchAction(String action, String role) {
 		

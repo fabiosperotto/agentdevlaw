@@ -14,6 +14,12 @@ Projeto da tese de doutorado. Usa como modelagem e testes a Lei [7653 de 1988](h
 2. No classpath do projeto, adicionar .jar externos referente ao framework Jena. Os componentes podem ser encontrados em apache-jena-X.X.X/lib (X -> número da versão). O download do framework pode ser [feito aqui](https://jena.apache.org/download/index.cgi).
 3. É necessário uma ontologia de referência para ser utilizada como base de conhecimento, uma ontologia é fornecida no diretório /bases como exemplo. Pode ser levantado um serviço de consultas SPARQL com o arquivo OWL fornecido (ver Fuseki abaixo).
 
+### Gerando a biblioteca
+Para gerar uma lib a fim de ser utilizada em outros projetos ou em plataformas de simulação de agentes, execute os passos (para Eclipse):
+1. Clique com o botão direito no projeto > Export;
+2. Dentro das opções do wizard escolha Java > Runnable JAR file
+3. Na tela seguinte escolha a opção Extract required libraries into generated JAR, para que as bibliotecas dependentes do Jena possam ser extraídas corretamente e reunidas junta com as demais classes deste projeto. Em seguida só escolher caminho e nome desejado para o .jar a ser gerado.
+
 ### Fuseki
 
 [Fuseki](https://jena.apache.org/documentation/fuseki2/) é um servidor SPARQL onde ontologias podem ser fornecidas através de um webservice, servindo como endpoint para efetuar consultas. É utilizado neste projeto desde sua primeira versão.

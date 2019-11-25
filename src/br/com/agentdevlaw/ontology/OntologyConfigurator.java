@@ -80,7 +80,7 @@ public class OntologyConfigurator {
 
 	/**
 	 * Set the origin of an ontology, the options are: MODEL (file origin) or SERVER (url origin)
-	 * @param origin
+	 * @param origin the option constant described (MODEL/SERVER)
 	 */
 	public void setOrigin(int origin) {
 		this.origin = origin;
