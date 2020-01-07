@@ -12,6 +12,7 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
 
+import br.com.agentdevlaw.legislation.Consequence;
 import br.com.agentdevlaw.legislation.Law;
 import br.com.agentdevlaw.legislation.Norm;
 import br.com.agentdevlaw.ontology.OntologyConfigurator;
@@ -91,20 +92,21 @@ public class QueryProcess {
 			"WHERE {  " + 
 			"	{   " + 
 			"    	?law rdf:type law:Legislation . " + 
-			"    	?law rdfs:comment ?c . " + 
+			"    	?law rdfs:comment ?description . " + 
 			"    	?law law:starts_at ?starts_at. " + 
 			"    	OPTIONAL { ?law law:ends_at ?ends_at } . " + 
 			"   		FILTER(\""+ now +"\"^^xsd:dateTime >= ?starts_at ) . " + 
-			"    	?law ?p ?line . " + 
-			"    	?line law:apply ?consequences . " + 
-			"    	?line law:relates ?roles . " + 
+			"    	?law ?p ?condition . " + 
+			" 		OPTIONAL { ?condition rdfs:comment ?cond_desc } . " +
+			"    	?condition law:apply ?consequences . " + 
+			"    	?condition law:relates ?roles . " + 
 			"    	?consequences rdf:type ?type .  " + 
 			"	} " + 
 			"		UNION { " + 
 			"			?law law:ends_at ?ends_at . " + 
 			"			FILTER(\"" + now + "\"^^xsd:dateTime >= ?starts_at && \"" + now + "\"^^xsd:dateTime < ?ends_at ) . " + 
 			" 		}  " + 
-			"	FILTER regex(?c, \""+actionFilter+"\", \"i\") . " + 
+			"	FILTER regex(?description, \""+actionFilter+"\", \"i\") . " + 
 				agentRoleFilter +
 			"	FILTER(?p = law:specifiedBy) . " + 
 			"	FILTER(?type != owl:NamedIndividual) . " + 
@@ -147,13 +149,13 @@ public class QueryProcess {
 				if(ends != null) finalDate = (XSDDateTime) ends.getValue();
 				
 				law.setIndividual(legislation.getLocalName());
-				law.setDescription(this.qs.getLiteral("c").toString());
+				law.setDescription(this.qs.getLiteral("description").toString());
 				law.setNorms(new ArrayList<Norm>());
 				laws.add(law);
 				
 				if(this.debug > 0) {
 					System.out.println("Legislation: " + legislation.getLocalName());
-					System.out.println("Description of law: " + WordUtils.wrap(this.qs.getLiteral("c").toString(), 115, "\n", true));
+					System.out.println("Description of law: " + WordUtils.wrap(this.qs.getLiteral("description").toString(), 115, "\n", true));
 					System.out.print("Starts at: " + initialDate.getDays() + "/" + initialDate.getMonths() + "/" + initialDate.getYears() + " "+ initialDate.timeLexicalForm());
 					if(ends != null) System.out.print(" ends at: " + finalDate.getDays() + "/" + finalDate.getMonths() + "/" + finalDate.getYears() + " " + finalDate.timeLexicalForm());
 					System.out.println();
@@ -162,7 +164,7 @@ public class QueryProcess {
 			}
 			
 			norms = laws.get(laws.size()-1).getNorms();
-			Norm norm = new Norm(this.qs.getResource("line").getLocalName(), this.qs.getResource("consequences").getLocalName(), this.qs.getResource("type").getLocalName()); 
+			Norm norm = new Norm(this.qs.getResource("condition").getLocalName(), this.qs.getResource("consequences").getLocalName(), this.qs.getResource("type").getLocalName()); 
 			norms.add(norm);
 			laws.get(laws.size()-1).setNorms(norms);
 			
@@ -174,5 +176,44 @@ public class QueryProcess {
 		
 		return laws;
 	}
+	
+	
+	/**
+	 * Get values from norms consequences individual. Check about properties inside sanctions and 
+	 * returns something like values to pay a fine and other types of sanctions. Can return a 
+	 * empty list if the individual of sanction don't have properties values.  
+	 * @param norm Object of Norm with result values.
+	 * @return List Consequence
+	 */
+	public List<Consequence> getConsequenceValues(Norm norm) {
+		
+		
+		if(this.debug > 0) System.out.println("\n###\n Finding values from norm consequence "+ norm.getConsequence() +" \n###\n");
+		
+		String query = "SELECT ?type ?plain_value ?value_type \n" + 
+				"	WHERE { \n" + 
+				"	law:"+ norm.getConsequence() +" ?type ?value \n" + 
+				"	BIND(STR(?value) AS ?plain_value)\n" + 
+				"	BIND(datatype(?value) as ?value_type)\n" + 
+				"	FILTER(?type != rdf:type)\n" + 
+				"	}";
+		
+		List<Consequence> consequences = new ArrayList<Consequence>();
+	
+		ResultSet dataSet = this.ontology.setup(query);
+		while(dataSet.hasNext()) {
+			this.qs = dataSet.next();
+			Consequence consequence = new Consequence(norm.getConsequence(), 
+					this.qs.getResource("type").getLocalName(), 
+					this.qs.getLiteral("plain_value").getString(), 
+					this.qs.getResource("value_type").getLocalName()
+					);
+			consequences.add(consequence);			
+		}
+		
+		return consequences;
+		
+	}
+	
 
 }
