@@ -1,5 +1,8 @@
 package br.com.agentdevlaw.middleware;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -7,10 +10,13 @@ import java.util.List;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.jena.datatypes.xsd.XSDDateTime;
+import org.apache.jena.query.Dataset;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.update.UpdateAction;
+import org.apache.jena.util.FileManager;
 
 import br.com.agentdevlaw.legislation.Consequence;
 import br.com.agentdevlaw.legislation.Law;
@@ -213,6 +219,46 @@ public class QueryProcess {
 		
 		return consequences;
 		
+	}
+	
+	
+	public boolean insertNewLaw() {
+		
+		String query = "INSERT DATA\n" + 
+				"{" + 
+				"	law:law-88 rdf:type law:Legislation ." + 
+				"	law:law-88 rdfs:comment 'teste' . " + 
+				"  	law:law-88 law:starts_at '1988-02-12T00:00:00' ." + 
+				"  	law:88-article-2 rdf:type law:Norm ." + 
+				"  	law:88-article-2 law:relates law:allRoles ." + 
+				"  	law:law-88 law:specificiedBy law:88-article-2 ." + 
+				"}";
+		
+		if(this.ontology.getOrigin() == this.ontology.MODEL) {
+			UpdateAction.parseExecute(this.ontology.getQueryPrefix() + query, this.ontology.sourceModel);
+			InputStream in = FileManager.get().open("ontologies/agentdevlaw_english.owl");
+
+	        FileWriter out = null;
+			try {
+				out = new FileWriter("ontologies/agentdevlaw_english2.owl");
+				this.ontology.sourceModel.getWriter("RDF/XML-ABBREV").write(this.ontology.sourceModel, out, this.ontology.getUriBase());
+			    out.close();
+			    return true;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+			}
+		}
+		
+		if(this.ontology.getOrigin() == this.ontology.SERVER) {
+			
+			return this.ontology.setupUpdate(query);
+			
+		}
+		
+		return false;
+       
 	}
 	
 
