@@ -52,7 +52,7 @@ Para gerar uma lib a fim de ser utilizada em outros projetos ou em plataformas d
 
 
 ## Publications 
-(#publications)
+
 This is a product of PhD thesis of Fábio Aiub Sperotto
 
 - SPEROTTO, Fábio Aiub; BELCHIOR, Mairon; DE AGUIAR, Marilton Sanchotene. [Ontology-Based Legal System in Multi-agents Systems](https://link.springer.com/chapter/10.1007/978-3-030-33749-0_41). In: Mexican International Conference on Artificial Intelligence. Springer, Cham, 2019. p. 507-521.
