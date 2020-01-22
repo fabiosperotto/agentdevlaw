@@ -89,9 +89,6 @@ public class OntologyConfigurator {
 	}
 
 	public Model getSourceModel() {
-		if(this.sourceModel == null && this.origin == MODEL) {
-			this.sourceModel = FileManager.get().loadModel(this.endpoint);
-		}
 		return sourceModel;
 	}
 
@@ -133,6 +130,9 @@ public class OntologyConfigurator {
 	 */
 	public void setOrigin(int origin) {
 		this.origin = origin;
+		if(this.origin == MODEL) {
+			this.sourceModel = FileManager.get().loadModel(this.endpoint);
+		}
 	}
 	
 	/**
@@ -143,9 +143,6 @@ public class OntologyConfigurator {
 	private  QueryExecution QueryExecutionFabricator(String queryString) {
 		
 		QueryExecution query = null;
-		
-		System.out.println("endpoint used: "+this.endpoint);
-		System.out.println(this.queryPrefix + queryString);
 		
 		if(this.origin == SERVER) {
 				
@@ -161,9 +158,8 @@ public class OntologyConfigurator {
 		}
 			
 		if(this.origin == MODEL) {
-			System.out.println(this.endpoint);
+
 			try{
-				
 				
 				query = QueryExecutionFactory.create(this.queryPrefix + queryString, this.sourceModel);
 			
@@ -207,6 +203,21 @@ public class OntologyConfigurator {
                 request, this.endpoint).execute();
 		
 		return true;
+		
+	}
+	
+	/**
+	 * 
+	 * @param askQuery
+	 * @return
+	 */
+	public boolean askQueries(String askQuery) {
+		
+		this.endpoint = this.endpoint_query;
+		QueryExecution query = this.QueryExecutionFabricator(askQuery);
+		return query.execAsk();
+		
+		
 		
 	}
 	

@@ -1,7 +1,7 @@
 package br.com.agentdevlaw.legislation;
 
 /**
- * This class is used to process values from indivudual concepts with values properties 
+ * This class is used to process values from individual concepts with values properties 
  * like values to pay a fine, a integer about prison years and others. The valueType attribute 
  * is needed to explain about XSD datatypes  from OWL/RDF ontology (float, integer, datetime 
  * and others).

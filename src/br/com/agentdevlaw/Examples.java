@@ -74,8 +74,12 @@ public class Examples {
 //		private String consequenceType;
 		List<Norm> normas = new ArrayList<Norm>();
 		Norm novaNorma = new Norm("88-article-2", "pay-a-fine_200-300", "PayAFine");
-		novaNorma.setRole("allRoles");
+		novaNorma.setRole("testeRole"); //isto e opcional, allRoles e o papel padrao relacionado
+		
+		
 		normas.add(novaNorma);
+		
+		
 		
 		novaLei.setNorms(normas);
 		

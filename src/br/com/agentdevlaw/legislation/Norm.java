@@ -16,6 +16,7 @@ public class Norm {
 		this.individual = individual;
 		this.consequence = consequence;
 		this.consequenceType = consequenceType;
+		this.role = "allRoles";
 	}
 	
 	public String getRole() {

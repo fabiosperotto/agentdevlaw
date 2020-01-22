@@ -220,12 +220,84 @@ public class QueryProcess {
 		return consequences;
 	}
 	
-	
+	/**
+	 * Insert a new law inside to the ontology
+	 * @param newLaw object with all data about the law and it norms
+	 * @return true if law was inserted, false otherwise
+	 */
 	public boolean insertNewLaw(Law newLaw) {
 		
 		String query = this.prepareQueryNewLaw(newLaw);	
 		System.out.println(query);
 		System.exit(0);
+		
+		return this.dispatchUpdate(query);
+       
+	}
+	
+	/**
+	 * This function mount a SPARQL query related to create one new law with the specifications 
+	 * like dates, norms, consequences.
+	 * @param newLaw object of Law
+	 * @return String with a ready to go SPARQL query
+	 */
+	protected String prepareQueryNewLaw(Law newLaw) {
+		
+		String query = "INSERT DATA\n" + 
+				"{" + 
+				"	law:"+ newLaw.getIndividual() +" rdf:type law:Legislation ." + 
+				"	law:"+ newLaw.getIndividual() +" rdfs:comment '"+ newLaw.getDescription() +"' . " + 
+				"  	law:"+ newLaw.getIndividual() +" law:starts_at '"+ newLaw.getStartDate() +"' .";
+		
+		if(newLaw.getEndDate() != null) {
+			query += "  law:"+ newLaw.getIndividual() +" law:ends_at '"+ newLaw.getEndDate() +"' .";
+		}
+		
+		List<Norm> norms = newLaw.getNorms();
+		
+		if(norms.size() > 0) {
+			
+			for(int i = 0; i < norms.size(); i++) {
+				System.out.println(norms.get(i).getIndividual());
+				String ask = "ASK" + 
+						"{" + 
+						"  law:"+ norms.get(i).getRole() +" rdf:type law:Role .\n" + 
+						"}";
+				if(!this.ontology.askQueries(ask)) {
+					this.createRole(norms.get(i).getRole());
+				}
+				
+				query += "  law:"+norms.get(i).getIndividual()+" rdf:type law:Norm ."
+						+ "  law:"+norms.get(i).getIndividual()+" law:relates law:"+norms.get(i).getRole()+" ."
+						+ "  law:"+ newLaw.getIndividual() +" law:specificiedBy law:"+norms.get(i).getIndividual()+" .";
+			}
+		}
+		
+		return query;
+	}
+	
+	/**
+	 * Simple way to create a new role inside the ontology
+	 * @param newRole string with the name of a new individual role.
+	 * @return true if ontology was updated, false otherwise
+	 */
+	public boolean createRole(String newRole) {
+		
+		String query = "INSERT DATA\n" + 
+				"{" + 
+				"	law:"+ newRole +" rdf:type law:Role ." + 
+				"}";
+		
+		return this.dispatchUpdate(query);
+		
+	}
+	
+	/**
+	 * Dispatch the update query type to the origin ontology (sparql service or file) 
+	 * @param query String with the update query
+	 * @return true if the query was successful dispatch, false otherwise 
+	 */
+	private boolean dispatchUpdate(String query) {
 		
 		if(this.ontology.getOrigin() == this.ontology.MODEL) {
 			
@@ -250,41 +322,7 @@ public class QueryProcess {
 		}
 		
 		return false;
-       
-	}
-	
-	protected String prepareQueryNewLaw(Law newLaw) {
 		
-//		String query = "INSERT DATA\n" + 
-//		"{" + 
-//		"	law:"+ newLaw.getIndividual() +" rdf:type law:Legislation ." + 
-//		"	law:"+ newLaw.getIndividual() +" rdfs:comment '"+ newLaw.getDescription() +"' . " + 
-//		"  	law:"+ newLaw.getIndividual() +" law:starts_at '1988-02-12T00:00:00' ." + 
-//		"  	law:88-article-2 rdf:type law:Norm ." + 
-//		"  	law:88-article-2 law:relates law:allRoles ." + 
-//		"  	law:law-88 law:specificiedBy law:88-article-2 ." + 
-//law:88-article-2 law:apply law:pay-a-fine-5-20 .
-//		"}";
-		
-		String query = "INSERT DATA\n" + 
-				"{" + 
-				"	law:"+ newLaw.getIndividual() +" rdf:type law:Legislation ." + 
-				"	law:"+ newLaw.getIndividual() +" rdfs:comment '"+ newLaw.getDescription() +"' . " + 
-				"  	law:"+ newLaw.getIndividual() +" law:starts_at '"+ newLaw.getStartDate() +"' .";
-		
-		if(newLaw.getEndDate() != null) {
-			query += "  law:"+ newLaw.getIndividual() +" law:ends_at '"+ newLaw.getEndDate() +"' .";
-		}
-		
-		List<Norm> norms = newLaw.getNorms();
-		for(int i=0; i < norms.size(); i++) {
-			System.out.println(norms.get(i).getIndividual());
-			query += "  law:"+norms.get(i).getIndividual()+" rdf:type law:Norm ."
-					+ "  law:"+norms.get(i).getIndividual()+" law:relates law:"+norms.get(i).getRole()+" ."
-					+ "  law:"+ newLaw.getIndividual() +" law:specificiedBy law:"+norms.get(i).getIndividual()+" .";
-		}
-		
-		return query;
 	}
 	
 
