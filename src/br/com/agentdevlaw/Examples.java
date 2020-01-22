@@ -13,7 +13,7 @@ public class Examples {
 	public static void main(String[] args){
 		
 		OntologyConfigurator ontology = new OntologyConfigurator();
-		ontology.setOrigin(OntologyConfigurator.SERVER);
+		ontology.setOrigin(OntologyConfigurator.MODEL);
 		
 		QueryProcess middleware = new QueryProcess(ontology);
 		middleware.setDebug(1);

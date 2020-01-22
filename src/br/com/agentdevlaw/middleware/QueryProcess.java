@@ -218,7 +218,6 @@ public class QueryProcess {
 		}
 		
 		return consequences;
-		
 	}
 	
 	
@@ -235,19 +234,18 @@ public class QueryProcess {
 				"}";
 		
 		if(this.ontology.getOrigin() == this.ontology.MODEL) {
-			UpdateAction.parseExecute(this.ontology.getQueryPrefix() + query, this.ontology.sourceModel);
+			
+			UpdateAction.parseExecute(this.ontology.getQueryPrefix() + query, this.ontology.getSourceModel());
 			InputStream in = FileManager.get().open("ontologies/agentdevlaw_english.owl");
 
 	        FileWriter out = null;
 			try {
-				out = new FileWriter("ontologies/agentdevlaw_english2.owl");
-				this.ontology.sourceModel.getWriter("RDF/XML-ABBREV").write(this.ontology.sourceModel, out, this.ontology.getUriBase());
+				out = new FileWriter("ontologies/agentdevlaw_english.owl");
+				this.ontology.getSourceModel().getWriter("RDF/XML-ABBREV").write(this.ontology.getSourceModel(), out, this.ontology.getUriBase());
 			    out.close();
 			    return true;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				
 			}
 		}
 		

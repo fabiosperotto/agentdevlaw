@@ -28,7 +28,7 @@ public class OntologyConfigurator {
 			"PREFIX owl: <http://www.w3.org/2002/07/owl#>" +
 			"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>" +
 			"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>";
-	public Model sourceModel = null;
+	private Model sourceModel = null;
 	
 	/**
 	 * Set the origin of an ontology to file
@@ -45,20 +45,58 @@ public class OntologyConfigurator {
 	
 	public OntologyConfigurator() {
 		
+		Properties prop = this.getProperties();
+		this.endpoint_query = prop.getProperty("onto.endpoint");
+		this.endpoint_update = prop.getProperty("onto.endpoint_update");
+		this.endpoint = this.endpoint_query;
+		this.uriBase = prop.getProperty("onto.base_uri");
+		this.queryPrefix += "PREFIX law: <"+this.uriBase+"#>";
+		
+	}
+	
+	/**
+	 * Get properties from configuration file (need a config.properties)
+	 * @return Properties object
+	 */
+	public Properties getProperties() {
+		
+		Properties prop = new Properties();
 		try(InputStream input = new FileInputStream("config.properties")){
-			Properties prop = new Properties();
+			
 			prop.load(input);
-			this.endpoint_query = prop.getProperty("onto.endpoint");
-			this.endpoint_update = prop.getProperty("onto.endpoint_update");
-			this.endpoint = this.endpoint_query;
-			this.uriBase = prop.getProperty("onto.base_uri");
-			this.queryPrefix += "PREFIX law: <"+this.uriBase+"#>";
 			
 		}catch(IOException ex) {
 			System.out.println("config.properties file not found or without the correct onto.endpoint/onto.base_uri values");
 		}
 		
-		
+		return prop;
+	}
+
+	public String getEndpoint_query() {
+		return endpoint_query;
+	}
+
+	public void setEndpoint_query(String endpoint_query) {
+		this.endpoint_query = endpoint_query;
+	}
+
+	public String getEndpoint_update() {
+		return endpoint_update;
+	}
+
+	public void setEndpoint_update(String endpoint_update) {
+		this.endpoint_update = endpoint_update;
+	}
+
+	public Model getSourceModel() {
+		if(this.sourceModel == null && this.origin == MODEL) {
+			this.sourceModel = FileManager.get().loadModel(this.endpoint);
+		}
+		return sourceModel;
+	}
+
+	public void setSourceModel(Model sourceModel) {
+		this.sourceModel = sourceModel;
 	}
 
 	public String getUriBase() {
@@ -123,10 +161,12 @@ public class OntologyConfigurator {
 		}
 			
 		if(this.origin == MODEL) {
-	
+			System.out.println(this.endpoint);
 			try{
-				this.sourceModel = FileManager.get().loadModel(this.endpoint);
+				
+				
 				query = QueryExecutionFactory.create(this.queryPrefix + queryString, this.sourceModel);
+			
 			}catch (Exception e) {
 				System.out.println(e.getMessage() + ", check your config.properties");
 				return null;
