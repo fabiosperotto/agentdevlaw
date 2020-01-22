@@ -6,6 +6,7 @@ public class Norm {
 	private String individual;
 	private String consequence;
 	private String consequenceType;
+	private String role;
 
 	public Norm() {
 
@@ -15,6 +16,14 @@ public class Norm {
 		this.individual = individual;
 		this.consequence = consequence;
 		this.consequenceType = consequenceType;
+	}
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 	public String getIndividual() {

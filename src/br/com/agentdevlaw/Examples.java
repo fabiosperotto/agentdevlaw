@@ -1,11 +1,13 @@
 package br.com.agentdevlaw;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.agentdevlaw.legislation.Consequence;
 import br.com.agentdevlaw.legislation.Law;
 import br.com.agentdevlaw.legislation.Norm;
 import br.com.agentdevlaw.middleware.QueryProcess;
+import br.com.agentdevlaw.misc.OntologyDate;
 import br.com.agentdevlaw.ontology.OntologyConfigurator;
 
 public class Examples {
@@ -53,13 +55,33 @@ public class Examples {
 //					
 //				}
 //			}
-			if(middleware.insertNewLaw()) {
-				System.out.println("Insert realizado com sucesso");
-			}
 //		}
 		
 		
-	
+//		law:law-88 rdf:type law:Legislation .
+//		law:law-88 rdfs:comment 'teste' . 
+//	  	law:law-88 law:starts_at '1988-02-12T00:00:00' .
+//	  	law:88-article-2 rdf:type law:Norm .
+//	  	law:88-article-2 law:relates law:allRoles .
+//	  	law:law-88 law:specificiedBy law:88-article-2 .
+//	  	law:88-article-2 law:apply law:pay-a-fine-5-20 .
+		Law novaLei = new Law("law-88", "teste");
+		novaLei.setStartDate(OntologyDate.createDateFormat(1988, 02, 12, 00, 00, 00));
+//		novaLei.setEndDate(OntologyDate.createDateFormat(2021, 02, 12, 00, 00, 00));
+//		private Law law;
+//		private String individual;
+//		private String consequence;
+//		private String consequenceType;
+		List<Norm> normas = new ArrayList<Norm>();
+		Norm novaNorma = new Norm("88-article-2", "pay-a-fine_200-300", "PayAFine");
+		novaNorma.setRole("allRoles");
+		normas.add(novaNorma);
+		
+		novaLei.setNorms(normas);
+		
+		if(middleware.insertNewLaw(novaLei)) {
+			System.out.println("Insert realizado com sucesso");
+		}
 
 	}
 

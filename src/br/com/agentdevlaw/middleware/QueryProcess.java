@@ -221,26 +221,20 @@ public class QueryProcess {
 	}
 	
 	
-	public boolean insertNewLaw() {
+	public boolean insertNewLaw(Law newLaw) {
 		
-		String query = "INSERT DATA\n" + 
-				"{" + 
-				"	law:law-88 rdf:type law:Legislation ." + 
-				"	law:law-88 rdfs:comment 'teste' . " + 
-				"  	law:law-88 law:starts_at '1988-02-12T00:00:00' ." + 
-				"  	law:88-article-2 rdf:type law:Norm ." + 
-				"  	law:88-article-2 law:relates law:allRoles ." + 
-				"  	law:law-88 law:specificiedBy law:88-article-2 ." + 
-				"}";
+		String query = this.prepareQueryNewLaw(newLaw);	
+		System.out.println(query);
+		System.exit(0);
 		
 		if(this.ontology.getOrigin() == this.ontology.MODEL) {
 			
 			UpdateAction.parseExecute(this.ontology.getQueryPrefix() + query, this.ontology.getSourceModel());
-			InputStream in = FileManager.get().open("ontologies/agentdevlaw_english.owl");
+			InputStream in = FileManager.get().open(this.ontology.getEndpoint());
 
 	        FileWriter out = null;
 			try {
-				out = new FileWriter("ontologies/agentdevlaw_english.owl");
+				out = new FileWriter(this.ontology.getEndpoint());
 				this.ontology.getSourceModel().getWriter("RDF/XML-ABBREV").write(this.ontology.getSourceModel(), out, this.ontology.getUriBase());
 			    out.close();
 			    return true;
@@ -257,6 +251,40 @@ public class QueryProcess {
 		
 		return false;
        
+	}
+	
+	protected String prepareQueryNewLaw(Law newLaw) {
+		
+//		String query = "INSERT DATA\n" + 
+//		"{" + 
+//		"	law:"+ newLaw.getIndividual() +" rdf:type law:Legislation ." + 
+//		"	law:"+ newLaw.getIndividual() +" rdfs:comment '"+ newLaw.getDescription() +"' . " + 
+//		"  	law:"+ newLaw.getIndividual() +" law:starts_at '1988-02-12T00:00:00' ." + 
+//		"  	law:88-article-2 rdf:type law:Norm ." + 
+//		"  	law:88-article-2 law:relates law:allRoles ." + 
+//		"  	law:law-88 law:specificiedBy law:88-article-2 ." + 
+//law:88-article-2 law:apply law:pay-a-fine-5-20 .
+//		"}";
+		
+		String query = "INSERT DATA\n" + 
+				"{" + 
+				"	law:"+ newLaw.getIndividual() +" rdf:type law:Legislation ." + 
+				"	law:"+ newLaw.getIndividual() +" rdfs:comment '"+ newLaw.getDescription() +"' . " + 
+				"  	law:"+ newLaw.getIndividual() +" law:starts_at '"+ newLaw.getStartDate() +"' .";
+		
+		if(newLaw.getEndDate() != null) {
+			query += "  law:"+ newLaw.getIndividual() +" law:ends_at '"+ newLaw.getEndDate() +"' .";
+		}
+		
+		List<Norm> norms = newLaw.getNorms();
+		for(int i=0; i < norms.size(); i++) {
+			System.out.println(norms.get(i).getIndividual());
+			query += "  law:"+norms.get(i).getIndividual()+" rdf:type law:Norm ."
+					+ "  law:"+norms.get(i).getIndividual()+" law:relates law:"+norms.get(i).getRole()+" ."
+					+ "  law:"+ newLaw.getIndividual() +" law:specificiedBy law:"+norms.get(i).getIndividual()+" .";
+		}
+		
+		return query;
 	}
 	
 

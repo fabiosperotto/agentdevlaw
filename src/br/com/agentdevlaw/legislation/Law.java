@@ -1,5 +1,7 @@
 package br.com.agentdevlaw.legislation;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -13,6 +15,8 @@ public class Law {
 	private String description;
 	private String individual;
 	protected List<Norm> norms;
+	private String startDate;
+	private String endDate = null; //sometimes a law is always valid or not expire ;)
 
 	public Law() {
 
@@ -46,5 +50,23 @@ public class Law {
 	public void setNorms(List<Norm> norms) {
 		this.norms = norms;
 	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+	
+	
 
 }
