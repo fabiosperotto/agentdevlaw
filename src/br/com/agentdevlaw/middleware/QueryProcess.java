@@ -309,10 +309,10 @@ public class QueryProcess {
 	 */
 	private boolean dispatchUpdate(String query) {
 		
-		if(this.ontology.getOrigin() == this.ontology.MODEL) {
+		if(this.ontology.getOrigin() == OntologyConfigurator.MODEL) {
 			
 			UpdateAction.parseExecute(this.ontology.getQueryPrefix() + query, this.ontology.getSourceModel());
-			InputStream in = FileManager.get().open(this.ontology.getEndpoint());
+			FileManager.get().open(this.ontology.getEndpoint());
 
 	        FileWriter out = null;
 			try {
@@ -326,7 +326,7 @@ public class QueryProcess {
 			}
 		}
 		
-		if(this.ontology.getOrigin() == this.ontology.SERVER) {
+		if(this.ontology.getOrigin() == OntologyConfigurator.SERVER) {
 			if(this.debug > 0) System.out.println("Updating on SPARQL webservice");
 			return this.ontology.setupUpdate(query);
 			
