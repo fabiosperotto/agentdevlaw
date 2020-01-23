@@ -1,13 +1,13 @@
 # AgentDevLaw
 
-Este projeto fornece um middleware entre uma ontologia legal e um sistema multiagente. A ontologia legal é oriunda do modelo criado na tese de doutorado de Fábio Aiub Sperotto sobre a legislação brasileira (ver [publications](#publications)). Uma cópia desta ontologia é fornecida no diretório /ontologies. Utiliza como referência para testes as leis:
+Este projeto fornece um middleware entre uma ontologia legal e um sistema multiagente. A ontologia legal é oriunda do modelo criado na tese de doutorado de Fábio Aiub Sperotto sobre a legislação brasileira (ver [publicações](#publications)). Uma cópia desta ontologia é fornecida no diretório /ontologies. Utiliza como referência para testes as leis:
 
 - Lei [7653 de 1988](http://www.planalto.gov.br/Ccivil_03/leis/L7653.htm) sobre pescaria na época de reprodução de peixes.
 - Lei [5197 de 1967](http://www.planalto.gov.br/ccivil_03/leis/L5197compilado.htm) sobre a caça de animais.
 
 
 
-This project provide an middleware between a legal ontology and an multiagent systems. The legal ontology is from a ontology model created in PhD thesis of Fábio Aiub Sperotto about the brazilian legislation. A copy of this ontology can be found in /ontologies folder. For testing purposes, use the following laws as a reference:
+This project provide an middleware between a legal ontology and an multiagent systems. The legal ontology is from a ontology model created in PhD thesis of Fábio Aiub Sperotto about the brazilian legislation (see [publications](#publications)). A copy of this ontology can be found in /ontologies folder. For testing purposes, use the following laws as a reference:
 - Lei [7653 de 1988](http://www.planalto.gov.br/Ccivil_03/leis/L7653.htm) about fishing in reprodution period of fishes.
 - Lei [5197 de 1967](http://www.planalto.gov.br/ccivil_03/leis/L5197compilado.htm) about animal hunting.
 
