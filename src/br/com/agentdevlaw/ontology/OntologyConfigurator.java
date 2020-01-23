@@ -10,10 +10,8 @@ import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.update.UpdateAction;
 import org.apache.jena.update.UpdateExecutionFactory;
 import org.apache.jena.update.UpdateFactory;
-import org.apache.jena.update.UpdateProcessor;
 import org.apache.jena.update.UpdateRequest;
 import org.apache.jena.util.FileManager;
 
@@ -207,17 +205,15 @@ public class OntologyConfigurator {
 	}
 	
 	/**
-	 * 
-	 * @param askQuery
-	 * @return
+	 * Execute ASK SPARQL queries
+	 * @param askQuery String with a well formed query
+	 * @return boolean the return of a response ASK query, that always true or false if exists
 	 */
 	public boolean askQueries(String askQuery) {
 		
 		this.endpoint = this.endpoint_query;
 		QueryExecution query = this.QueryExecutionFabricator(askQuery);
 		return query.execAsk();
-		
-		
 		
 	}
 	

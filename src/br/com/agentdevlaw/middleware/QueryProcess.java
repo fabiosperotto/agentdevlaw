@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.jena.datatypes.xsd.XSDDateTime;
-import org.apache.jena.query.Dataset;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.Literal;
@@ -130,14 +129,13 @@ public class QueryProcess {
 		
 		if(this.debug > 0) System.out.println("### \nSearching in all laws for action '" + action + " for the agent type " + role + "'\n###\n");
 		String query = this.modelLegislationQuery(action, role);
-		
+	
 		ResultSet dataSet = this.ontology.setup(query);
 		Resource legislation = null;
 		Literal ends = null;
 		XSDDateTime initialDate, finalDate = null;
 		String lastLaw = "";
 		List<Law> laws = new ArrayList<Law>();
-		
 		
 		while(dataSet.hasNext()) {
 			this.qs = dataSet.next();
@@ -227,10 +225,8 @@ public class QueryProcess {
 	 */
 	public boolean insertNewLaw(Law newLaw) {
 		
-		String query = this.prepareQueryNewLaw(newLaw);	
-		System.out.println(query);
-		System.exit(0);
-		
+		String query = this.prepareQueryNewLaw(newLaw);
+		if(this.debug > 0) System.out.println("Query about a new law is ready to dispatch");
 		return this.dispatchUpdate(query);
        
 	}
@@ -258,34 +254,48 @@ public class QueryProcess {
 		if(norms.size() > 0) {
 			
 			for(int i = 0; i < norms.size(); i++) {
-				System.out.println(norms.get(i).getIndividual());
+				
 				String ask = "ASK" + 
 						"{" + 
 						"  law:"+ norms.get(i).getRole() +" rdf:type law:Role .\n" + 
 						"}";
 				if(!this.ontology.askQueries(ask)) {
-					this.createRole(norms.get(i).getRole());
+					this.createIndividual(norms.get(i).getRole(), "Role");
+					if(this.debug > 0) System.out.println("Creating new role "+norms.get(i).getRole());
+				}
+				
+				ask = "ASK" + 
+					"{" + 
+					"  law:"+ norms.get(i).getConsequence() +" rdf:type law:"+ norms.get(i).getConsequenceType() +" .\n" + 
+					"}";
+				if(!this.ontology.askQueries(ask)) {
+					this.createIndividual(norms.get(i).getConsequence(), norms.get(i).getConsequenceType());
+					if(this.debug > 0) System.out.println("Creating new individual "+ norms.get(i).getConsequence() +" of type "+norms.get(i).getConsequenceType());
 				}
 				
 				query += "  law:"+norms.get(i).getIndividual()+" rdf:type law:Norm ."
-						+ "  law:"+norms.get(i).getIndividual()+" law:relates law:"+norms.get(i).getRole()+" ."
-						+ "  law:"+ newLaw.getIndividual() +" law:specificiedBy law:"+norms.get(i).getIndividual()+" .";
+						+ "  law:"+norms.get(i).getIndividual()+" law:relates law:"+ norms.get(i).getRole() +" ."
+						+ "  law:"+ newLaw.getIndividual() +" law:specificiedBy law:"+ norms.get(i).getIndividual() +" ."
+						+ "	 law:"+ norms.get(i).getIndividual() +" law:apply law:"+ norms.get(i).getConsequence() +" .";
 			}
 		}
+		
+		query += "}";
 		
 		return query;
 	}
 	
 	/**
-	 * Simple way to create a new role inside the ontology
-	 * @param newRole string with the name of a new individual role.
+	 * Create a new individual inside de ontology. Check previously the ontology structure for valid concepts
+	 * @param individualName string with the name of a new individual
+	 * @param individualConcept string with the concept name of that same individual.
 	 * @return true if ontology was updated, false otherwise
 	 */
-	public boolean createRole(String newRole) {
+	public boolean createIndividual(String individualName, String individualConcept) {
 		
 		String query = "INSERT DATA\n" + 
 				"{" + 
-				"	law:"+ newRole +" rdf:type law:Role ." + 
+				"	law:"+ individualName +" rdf:type law:"+ individualConcept +" ." + 
 				"}";
 		
 		return this.dispatchUpdate(query);
@@ -309,6 +319,7 @@ public class QueryProcess {
 				out = new FileWriter(this.ontology.getEndpoint());
 				this.ontology.getSourceModel().getWriter("RDF/XML-ABBREV").write(this.ontology.getSourceModel(), out, this.ontology.getUriBase());
 			    out.close();
+			    if(this.debug > 0) System.out.println("Model was successful update");
 			    return true;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -316,7 +327,7 @@ public class QueryProcess {
 		}
 		
 		if(this.ontology.getOrigin() == this.ontology.SERVER) {
-			
+			if(this.debug > 0) System.out.println("Updating on SPARQL webservice");
 			return this.ontology.setupUpdate(query);
 			
 		}
