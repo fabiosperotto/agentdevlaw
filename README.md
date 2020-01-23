@@ -47,6 +47,18 @@ Para gerar uma lib a fim de ser utilizada em outros projetos ou em plataformas d
 [Fuseki](https://jena.apache.org/documentation/fuseki2/) é um servidor SPARQL onde ontologias podem ser fornecidas através de um webservice, servindo como endpoint para efetuar consultas. É utilizado neste projeto desde sua primeira versão.
 
 
+### Dependences
+
+- owlapi-distribution-5.1.2
+- ontapi-2.0.0 https://search.maven.org/artifact/com.github.owlcs/ontapi/2.0.0/jar
+- javax.inject-1 https://mvnrepository.com/artifact/javax.inject/javax.inject/1
+- guice-4.2.2 https://mvnrepository.com/artifact/com.google.inject/guice/4.2.2
+- guava-28.2-jre https://mvnrepository.com/artifact/com.google.guava/guava/28.2-jre
+- eclipse-rdf4j-3.0.4-onejar https://rdf4j.org/download/
+- commons-rdf-api-0.5.0 https://mvnrepository.com/artifact/org.apache.commons/commons-rdf-api/0.5.0
+- caffeine-2.8.1 https://search.maven.org/artifact/com.github.ben-manes.caffeine/caffeine/2.8.1/jar
+
+
 ## Contributors
 - Fábio Aiub Sperotto [fabio.aiub@gmail.com](mailto:fabio.aiub@gmail.com)
 
