@@ -7,7 +7,7 @@ Este projeto fornece um middleware entre uma ontologia legal e um sistema multia
 
 
 
-This project provide an middleware between a legal ontology and an multiagent systems. The legal ontology is from a ontology model created in PhD thesis of Fábio Aiub Sperotto about the brazilian legislation (see [publications](#publications)). A copy of this ontology can be found in /ontologies folder. For testing purposes, use the following laws as a reference:
+This project provides a middleware between a legal ontology and multiagent systems. The legal ontology is from an ontology model created in a PhD thesis of Fábio Aiub Sperotto about the Brazilian legislation (see [publications](#publications)). A copy of this ontology can be found in /ontologies folder. For testing purposes, use the following laws as a reference:
 - Lei [7653 de 1988](http://www.planalto.gov.br/Ccivil_03/leis/L7653.htm) about fishing in reprodution period of fishes.
 - Lei [5197 de 1967](http://www.planalto.gov.br/ccivil_03/leis/L5197compilado.htm) about animal hunting.
 
@@ -39,7 +39,7 @@ This repository is for development purposes. Applications and other examples of 
 
 1. Criar projeto com as classes de /src
 2. No classpath do projeto, adicionar .jar externos referente ao framework Jena. Os componentes podem ser encontrados em apache-jena-X.X.X/lib (X -> número da versão). O download do framework pode ser [feito aqui](https://jena.apache.org/download/index.cgi).
-3. Coloque também os pacotes do diretório /vendor no classpath que são itens extras mas cruciais para funcionamento das manipulações de ontologias pelo middleware.
+3. Coloque também os pacotes do diretório /vendor no classpath que são itens extras para funcionamento das manipulações de ontologias pelo middleware (ver[Dependencies](#Dependencies)).
 4. É necessário uma ontologia de referência para ser utilizada como base de conhecimento, uma ontologia é fornecida no diretório /bases como exemplo. Pode ser levantado um serviço de consultas SPARQL com o arquivo OWL fornecido (ver Fuseki abaixo).
 
 
