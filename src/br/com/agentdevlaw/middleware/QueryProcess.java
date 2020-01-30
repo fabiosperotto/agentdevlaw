@@ -1,8 +1,8 @@
 package br.com.agentdevlaw.middleware;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -16,6 +16,12 @@ import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.update.UpdateAction;
 import org.apache.jena.util.FileManager;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+
+import com.github.owlcs.ontapi.OntManagers;
+import com.github.owlcs.ontapi.Ontology;
+import com.github.owlcs.ontapi.OntologyManager;
 
 import br.com.agentdevlaw.legislation.Consequence;
 import br.com.agentdevlaw.legislation.Law;
@@ -54,7 +60,9 @@ public class QueryProcess {
 
 
 	/**
-	 * @param debug um inteiro que se for maior que 0 (zero) define o nivel de apuracao de dados na tela
+	 * Define the debug message work level of system. When enabled, messages are printed with 
+	 * information about the middleware internal process.
+	 * @param debug int 0 to disabled, 1 to enable
 	 */
 	public void setDebug(int debug) {
 		this.debug = debug;
@@ -129,7 +137,7 @@ public class QueryProcess {
 		
 		if(this.debug > 0) System.out.println("### \nSearching in all laws for action '" + action + " for the agent type " + role + "'\n###\n");
 		String query = this.modelLegislationQuery(action, role);
-	
+
 		ResultSet dataSet = this.ontology.setup(query);
 		Resource legislation = null;
 		Literal ends = null;
@@ -243,7 +251,7 @@ public class QueryProcess {
 				"{" + 
 				"	law:"+ newLaw.getIndividual() +" rdf:type law:Legislation ." + 
 				"	law:"+ newLaw.getIndividual() +" rdfs:comment '"+ newLaw.getDescription() +"' . " + 
-				"  	law:"+ newLaw.getIndividual() +" law:starts_at '"+ newLaw.getStartDate() +"' .";
+				"  	law:"+ newLaw.getIndividual() +" law:starts_at '"+ newLaw.getStartDate() +"'^^xsd:dateTime .";
 		
 		if(newLaw.getEndDate() != null) {
 			query += "  law:"+ newLaw.getIndividual() +" law:ends_at '"+ newLaw.getEndDate() +"' .";
@@ -274,8 +282,9 @@ public class QueryProcess {
 				}
 				
 				query += "  law:"+norms.get(i).getIndividual()+" rdf:type law:Norm ."
+					
 						+ "  law:"+norms.get(i).getIndividual()+" law:relates law:"+ norms.get(i).getRole() +" ."
-						+ "  law:"+ newLaw.getIndividual() +" law:specificiedBy law:"+ norms.get(i).getIndividual() +" ."
+						+ "  law:"+ newLaw.getIndividual() +" law:specifiedBy law:"+ norms.get(i).getIndividual() +" ."
 						+ "	 law:"+ norms.get(i).getIndividual() +" law:apply law:"+ norms.get(i).getConsequence() +" .";
 			}
 		}
@@ -311,19 +320,23 @@ public class QueryProcess {
 		
 		if(this.ontology.getOrigin() == OntologyConfigurator.MODEL) {
 			
-			UpdateAction.parseExecute(this.ontology.getQueryPrefix() + query, this.ontology.getSourceModel());
 			FileManager.get().open(this.ontology.getEndpoint());
-
-	        FileWriter out = null;
+			
+			OntologyManager m = OntManagers.createONT();
+			File fileout = new File(this.ontology.getEndpoint());
 			try {
-				out = new FileWriter(this.ontology.getEndpoint());
-				this.ontology.getSourceModel().getWriter("RDF/XML-ABBREV").write(this.ontology.getSourceModel(), out, this.ontology.getUriBase());
-			    out.close();
-			    if(this.debug > 0) System.out.println("Model was successful update");
-			    return true;
-			} catch (IOException e) {
-				e.printStackTrace();
+				Ontology o = m.loadOntologyFromOntologyDocument(fileout);
+				
+				UpdateAction.parseExecute(this.ontology.getQueryPrefix() + query,
+	            o.asGraphModel());
+				
+				o.saveOntology(new FileOutputStream(fileout));
+				
+				return true;
+			} catch (OWLOntologyCreationException | OWLOntologyStorageException | FileNotFoundException e1) {
+				e1.printStackTrace();
 			}
+			
 		}
 		
 		if(this.ontology.getOrigin() == OntologyConfigurator.SERVER) {
