@@ -49,6 +49,7 @@ public class OntologyConfigurator {
 		this.endpoint = this.endpoint_query;
 		this.uriBase = prop.getProperty("onto.base_uri");
 		this.queryPrefix += "PREFIX law: <"+this.uriBase+"#>";
+		this.setOrigin(MODEL);
 		
 	}
 	
@@ -70,19 +71,19 @@ public class OntologyConfigurator {
 		return prop;
 	}
 
-	public String getEndpoint_query() {
+	public String getEndpointQuery() {
 		return endpoint_query;
 	}
 
-	public void setEndpoint_query(String endpoint_query) {
+	public void setEndpointQuery(String endpoint_query) {
 		this.endpoint_query = endpoint_query;
 	}
 
-	public String getEndpoint_update() {
+	public String getEndpointUpdate() {
 		return endpoint_update;
 	}
 
-	public void setEndpoint_update(String endpoint_update) {
+	public void setEndpointUpdate(String endpoint_update) {
 		this.endpoint_update = endpoint_update;
 	}
 
