@@ -39,8 +39,11 @@ This repository is for development purposes. Applications and other examples of 
 
 1. Criar projeto com as classes de /src
 2. No classpath do projeto, adicionar .jar externos referente ao framework Jena. Os componentes podem ser encontrados em apache-jena-X.X.X/lib (X -> número da versão). O download do framework pode ser [feito aqui](https://jena.apache.org/download/index.cgi).
-3. Coloque também os pacotes do diretório /vendor no classpath que são itens extras para funcionamento das manipulações de ontologias pelo middleware (ver[Dependencies](#Dependencies)).
+3. Coloque também os pacotes do diretório /vendor no classpath que são itens extras para funcionamento das manipulações de ontologias pelo middleware (ver [Dependencies](#Dependencies)).
 4. É necessário uma ontologia de referência para ser utilizada como base de conhecimento, uma ontologia é fornecida no diretório /bases como exemplo. Pode ser levantado um serviço de consultas SPARQL com o arquivo OWL fornecido (ver Fuseki abaixo).
+
+#### Tests
+Unit tests are available in tests package (jUnit 4 is in used).
 
 
 ### Generate the software component

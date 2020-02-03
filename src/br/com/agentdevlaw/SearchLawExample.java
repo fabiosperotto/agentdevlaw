@@ -1,13 +1,11 @@
 package br.com.agentdevlaw;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.agentdevlaw.legislation.Consequence;
 import br.com.agentdevlaw.legislation.Law;
 import br.com.agentdevlaw.legislation.Norm;
 import br.com.agentdevlaw.middleware.QueryProcess;
-import br.com.agentdevlaw.misc.OntologyDate;
 import br.com.agentdevlaw.ontology.OntologyConfigurator;
 
 public class SearchLawExample {
