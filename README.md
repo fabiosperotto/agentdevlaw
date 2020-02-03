@@ -15,7 +15,7 @@ This project provides a middleware between a legal ontology and multiagent syste
 
 ## How to Use
 
-This repository is for development purposes. Applications and other examples of this project can be found in:
+This repository is for development purposes and the [download of the last version](https://github.com/fabiosperotto/agentdevlaw/releases) of the middleware. Applications and other examples of this project can be found in:
 
 - Multiagent Systems Simulation with JaCaMo and AgentDevLaw: [https://github.com/fabiosperotto/legislative-simulation](https://github.com/fabiosperotto/legislative-simulation).
 - Multiagent Systems Simulation with JADE and AgentDevLaw: [https://github.com/fabiosperotto/legislative-simulation-jade](https://github.com/fabiosperotto/legislative-simulation-jade).
