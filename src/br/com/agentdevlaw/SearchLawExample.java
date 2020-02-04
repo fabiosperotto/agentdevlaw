@@ -18,9 +18,9 @@ public class SearchLawExample {
 		QueryProcess middleware = new QueryProcess(ontology);
 		middleware.setDebug(1);
 		
-		String action = "mining";
+		String action = "harvesting";
 		
-		List<Law> laws =  middleware.searchAction(action, "miner");
+		List<Law> laws =  middleware.searchAction(action, "");
 		
 		
 		if(laws.isEmpty()) {

@@ -83,6 +83,7 @@ public class QueryProcess {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String now = date.format(formatter);
 		now = now.replace(" ", "T");
+		System.out.println("Data agora "+now);
 		return now;
 	}
 	
@@ -108,17 +109,14 @@ public class QueryProcess {
 			"    	?law rdfs:comment ?description . " + 
 			"    	?law law:starts_at ?starts_at. " + 
 			"    	OPTIONAL { ?law law:ends_at ?ends_at } . " + 
-			"   		FILTER(\""+ now +"\"^^xsd:dateTime >= ?starts_at ) . " + 
+			"		FILTER(IF(EXISTS{ ?law law:ends_at ?ends_at }, \""+ now +"\"^^xsd:dateTime >= ?starts_at && \""+ now + "\"^^xsd:dateTime < ?ends_at , " +
+			 		"\"" + now + "\"^^xsd:dateTime >= ?starts_at )) ." +
 			"    	?law ?p ?condition . " + 
 			" 		OPTIONAL { ?condition rdfs:comment ?cond_desc } . " +
 			"    	?condition law:apply ?consequences . " + 
 			"    	?condition law:relates ?roles . " + 
 			"    	?consequences rdf:type ?type .  " + 
 			"	} " + 
-			"		UNION { " + 
-			"			?law law:ends_at ?ends_at . " + 
-			"			FILTER(\"" + now + "\"^^xsd:dateTime >= ?starts_at && \"" + now + "\"^^xsd:dateTime < ?ends_at ) . " + 
-			" 		}  " + 
 			"	FILTER regex(?description, \""+actionFilter+"\", \"i\") . " + 
 				agentRoleFilter +
 			"	FILTER(?p = law:specifiedBy) . " + 
