@@ -83,7 +83,6 @@ public class QueryProcess {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String now = date.format(formatter);
 		now = now.replace(" ", "T");
-		System.out.println("Data agora "+now);
 		return now;
 	}
 	
