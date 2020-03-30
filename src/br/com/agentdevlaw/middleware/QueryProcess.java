@@ -120,7 +120,8 @@ public class QueryProcess {
 				agentRoleFilter +
 			"	FILTER(?p = law:specifiedBy) . " + 
 			"	FILTER(?type != owl:NamedIndividual) . " + 
-			" } ";
+			" } "
+			+ "ORDER BY ASC(?starts_at) ";
 	}
 	
 	
