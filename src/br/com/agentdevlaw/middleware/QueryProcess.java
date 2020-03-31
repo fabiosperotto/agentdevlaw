@@ -133,7 +133,9 @@ public class QueryProcess {
 	 */
 	public List<Law> searchAction(String action, String role) {
 		
-		if(this.debug > 0) System.out.println("### \nSearching in all laws for action '" + action + " for the agent type " + role + "'\n###\n");
+		if(this.debug > 0) System.out.println("### \nSearching in all laws for action '" + action + "' for the agent type " + role + "'\n###\n");
+		action = action.replaceAll(" ", "|"); //removing spaces by the or operator improve better response from regex filters in SPARQL queries
+		
 		String query = this.modelLegislationQuery(action, role);
 
 		ResultSet dataSet = this.ontology.setup(query);
@@ -168,7 +170,7 @@ public class QueryProcess {
 					System.out.println("Description of law: " + WordUtils.wrap(this.qs.getLiteral("description").toString(), 115, "\n", true));
 					System.out.print("Starts at: " + initialDate.getDays() + "/" + initialDate.getMonths() + "/" + initialDate.getYears() + " "+ initialDate.timeLexicalForm());
 					if(ends != null) System.out.print(" ends at: " + finalDate.getDays() + "/" + finalDate.getMonths() + "/" + finalDate.getYears() + " " + finalDate.timeLexicalForm());
-					System.out.println();
+					System.out.println("");
 				}
 					
 			}
@@ -180,7 +182,7 @@ public class QueryProcess {
 			
 			if(this.debug > 0) {
 				System.out.print("Specified by " + norm.getIndividual());
-				System.out.println(" and has the consequence of '" + norm.getConsequence() + "' type of " + norm.getConsequenceType());
+				System.out.println(" and has the consequence of '" + norm.getConsequence() + "' type of " + norm.getConsequenceType() + "\n");
 			}
 		}
 		
