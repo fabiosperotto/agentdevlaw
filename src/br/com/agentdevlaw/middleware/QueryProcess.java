@@ -115,10 +115,10 @@ public class QueryProcess {
 			"    ?law rdfs:comment ?description . " + 
 			"    ?law law:starts_at ?starts_at. " + 
 			"    OPTIONAL { ?law law:ends_at ?ends_at } . " +
-//			"		FILTER(IF(EXISTS{ ?law law:ends_at ?ends_at }, \""+ 
-//						now +"\"^^xsd:dateTime >= ?starts_at && \""+ 
-//						now + "\"^^xsd:dateTime < ?ends_at , " +
-//			 		"\"" + now + "\"^^xsd:dateTime >= ?starts_at )) ." +
+			"		FILTER(IF(EXISTS{ ?law law:ends_at ?ends_at }, \""+ 
+						now +"\"^^xsd:dateTime >= ?starts_at && \""+ 
+						now + "\"^^xsd:dateTime < ?ends_at , " +
+			 		"\"" + now + "\"^^xsd:dateTime >= ?starts_at )) ." +
 			"    ?law ?predicative ?norm . " + 
 			"    OPTIONAL { ?norm rdfs:comment ?norm_desc } . " + 
 			"    ?norm law:apply ?norm_applied . " + 
