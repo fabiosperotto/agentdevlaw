@@ -40,6 +40,14 @@ public class OntologyConfigurator {
 	
 	private int origin = SERVER;
 	
+	/**
+	 * Set the search method to the default: find legislations by actions instances (0) 
+	 * or wit text similarities (1)
+	 */
+	public static final int SEARCHMETHOD = 0;
+	
+	private int searchMethod = SEARCHMETHOD;
+	
 	
 	public OntologyConfigurator() {
 		
@@ -50,6 +58,7 @@ public class OntologyConfigurator {
 		this.uriBase = prop.getProperty("onto.base_uri");
 		this.queryPrefix += "PREFIX law: <"+this.uriBase+"#>";
 		this.setOrigin(MODEL);
+		this.setSearchMethod(Integer.parseInt(prop.getProperty("onto.search_method")));
 		
 	}
 	
@@ -134,6 +143,15 @@ public class OntologyConfigurator {
 		}
 	}
 	
+	
+	public int getSearchMethod() {
+		return searchMethod;
+	}
+
+	public void setSearchMethod(int searchMethod) {
+		this.searchMethod = searchMethod;
+	}
+
 	/**
 	 * This will prepare the connection with a ontology origins (web or from file).
 	 * @param queryString required string to be executed

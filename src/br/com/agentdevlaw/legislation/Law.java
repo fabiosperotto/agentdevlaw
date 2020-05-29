@@ -15,6 +15,7 @@ public class Law {
 	protected List<Norm> norms;
 	private String startDate;
 	private String endDate = null; //sometimes a law is always valid or not expire ;)
+	private double textSimilarity = 0;
 
 	public Law() {
 
@@ -64,7 +65,14 @@ public class Law {
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
-	
+
+	public double getTextSimilarity() {
+		return textSimilarity;
+	}
+
+	public void setTextSimilarity(double textSimilarity) {
+		this.textSimilarity = textSimilarity;
+	}
 	
 
 }

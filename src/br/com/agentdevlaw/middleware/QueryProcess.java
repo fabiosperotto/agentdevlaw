@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -26,6 +28,7 @@ import com.github.owlcs.ontapi.OntologyManager;
 import br.com.agentdevlaw.legislation.Consequence;
 import br.com.agentdevlaw.legislation.Law;
 import br.com.agentdevlaw.legislation.Norm;
+import br.com.agentdevlaw.misc.TextSimilarity;
 import br.com.agentdevlaw.ontology.OntologyConfigurator;
 
 public class QueryProcess {
@@ -33,6 +36,7 @@ public class QueryProcess {
 	private OntologyConfigurator ontology;
 	private QuerySolution qs = null;
 	private int debug = 0;
+	private TextSimilarity textSimilarity;
 	
 	public OntologyConfigurator getOntology() {
 		return ontology;
@@ -57,8 +61,7 @@ public class QueryProcess {
 	public int getDebug() {
 		return debug;
 	}
-
-
+	
 	/**
 	 * Define the debug message work level of system. When enabled, messages are printed with 
 	 * information about the middleware internal process.
@@ -68,9 +71,12 @@ public class QueryProcess {
 		this.debug = debug;
 	}
 
+	
+
 
 	public QueryProcess(OntologyConfigurator ontologia) {
 		this.ontology = ontologia;
+		if(ontologia.getSearchMethod() == 1) this.textSimilarity = new TextSimilarity();
 	}
 	
 	/**
@@ -104,24 +110,64 @@ public class QueryProcess {
 		return "SELECT * " + 
 			"WHERE {  " + 
 			"	{   " + 
-			"    	?law rdf:type law:Legislation . " + 
-			"    	?law rdfs:comment ?description . " + 
-			"    	?law law:starts_at ?starts_at. " + 
-			"    	OPTIONAL { ?law law:ends_at ?ends_at } . " + 
-			"		FILTER(IF(EXISTS{ ?law law:ends_at ?ends_at }, \""+ now +"\"^^xsd:dateTime >= ?starts_at && \""+ now + "\"^^xsd:dateTime < ?ends_at , " +
-			 		"\"" + now + "\"^^xsd:dateTime >= ?starts_at )) ." +
-			"    	?law ?p ?condition . " + 
-			" 		OPTIONAL { ?condition rdfs:comment ?cond_desc } . " +
-			"    	?condition law:apply ?consequences . " + 
-			"    	?condition law:relates ?roles . " + 
-			"    	?consequences rdf:type ?type .  " + 
+			"    ?action rdf:type law:Action . " + 
+			"    ?action law:regulatedBy ?law . " + 
+			"    ?law rdfs:comment ?description . " + 
+			"    ?law law:starts_at ?starts_at. " + 
+			"    OPTIONAL { ?law law:ends_at ?ends_at } . " +
+//			"		FILTER(IF(EXISTS{ ?law law:ends_at ?ends_at }, \""+ 
+//						now +"\"^^xsd:dateTime >= ?starts_at && \""+ 
+//						now + "\"^^xsd:dateTime < ?ends_at , " +
+//			 		"\"" + now + "\"^^xsd:dateTime >= ?starts_at )) ." +
+			"    ?law ?predicative ?norm . " + 
+			"    OPTIONAL { ?norm rdfs:comment ?norm_desc } . " + 
+			"    ?norm law:apply ?norm_applied . " + 
+			"    ?norm_applied rdf:type ?norm_type . " + 
+			"    ?norm law:relates ?roles . " +
 			"	} " + 
-			"	FILTER regex(?description, \""+actionFilter+"\", \"i\") . " + 
+			"	FILTER regex(str(?action), \""+ actionFilter +"\", \"i\") . " +
 				agentRoleFilter +
-			"	FILTER(?p = law:specifiedBy) . " + 
-			"	FILTER(?type != owl:NamedIndividual) . " + 
+			"	FILTER(?norm_type != owl:NamedIndividual) . " +
 			" } "
 			+ "ORDER BY ASC(?starts_at) ";
+	}
+	
+	/**
+	 * Another option to build a query to search in ontology, like the modelLegislationQuery() 
+	 * method but in this case the query focus in search inside rdfs:comment of laws instances
+	 * @param actionFilter String with a expression to filter among many laws]
+	 * @param agentRole string with the agent type (provide empty string if this doesn't matter
+	 * @return String with query structured
+	 */
+	private String modelLegislationQuerySimilarityText(String actionFilter, String agentRole) {
+		
+		String now = this.dateSchemaNow();
+		String agentRoleFilter = "FILTER(?roles = law:allRoles) .";
+		if(!agentRole.isEmpty()) {
+			agentRoleFilter = "FILTER(?roles = law:" + agentRole + " || ?roles = law:allRoles) .";
+		}
+		 
+		return "SELECT * " + 
+		"WHERE {  " + 
+		"	{   " + 
+		"    	?law rdf:type law:Legislation . " + 
+		"    	?law rdfs:comment ?description . " + 
+		"    	?law law:starts_at ?starts_at. " + 
+		"    	OPTIONAL { ?law law:ends_at ?ends_at } . " + 
+		"		FILTER(IF(EXISTS{ ?law law:ends_at ?ends_at }, \""+ now +"\"^^xsd:dateTime >= ?starts_at && \""+ now + "\"^^xsd:dateTime < ?ends_at , " +
+		 		"\"" + now + "\"^^xsd:dateTime >= ?starts_at )) ." +
+		"    	?law ?predicative ?norm . " + 
+		" 		OPTIONAL { ?norm rdfs:comment ?norm_desc } . " +
+		"    	?norm law:apply ?norm_applied . " + 
+		"    	?norm law:relates ?roles . " + 
+		"    	?norm_applied rdf:type ?norm_type .  " + 
+		"	} " + 
+		"	FILTER regex(?description, \""+actionFilter+"\", \"i\") . " + 
+			agentRoleFilter +
+		"	FILTER(?predicative = law:specifiedBy) . " + 
+		"	FILTER(?norm_type != owl:NamedIndividual) . " + 
+		" } "
+		+ "ORDER BY ASC(?starts_at) ";
 	}
 	
 	
@@ -136,7 +182,9 @@ public class QueryProcess {
 		if(this.debug > 0) System.out.println("### \nSearching in all laws for action '" + action + "' for the agent type " + role + "'\n###\n");
 		action = action.replaceAll(" ", "|"); //removing spaces by the or operator improve better response from regex filters in SPARQL queries
 		
-		String query = this.modelLegislationQuery(action, role);
+		String query = "";
+		if(this.ontology.getSearchMethod() == 0) query = this.modelLegislationQuery(action, role);
+		if(this.ontology.getSearchMethod() == 1) query = this.modelLegislationQuerySimilarityText(action, role);
 
 		ResultSet dataSet = this.ontology.setup(query);
 		Resource legislation = null;
@@ -163,11 +211,18 @@ public class QueryProcess {
 				law.setIndividual(legislation.getLocalName());
 				law.setDescription(this.qs.getLiteral("description").toString());
 				law.setNorms(new ArrayList<Norm>());
+				
+				if(this.ontology.getSearchMethod() == 1) {
+					String actionDesired = action.replaceAll("\\|", " ");
+					law.setTextSimilarity(this.textSimilarity.CosineDistance(actionDesired, 
+																	law.getDescription()));
+				}
+				
 				laws.add(law);
 				
 				if(this.debug > 0) {
 					System.out.println("Legislation: " + legislation.getLocalName());
-					System.out.println("Description of law: " + WordUtils.wrap(this.qs.getLiteral("description").toString(), 115, "\n", true));
+					System.out.println("Description of law: " + WordUtils.wrap(this.qs.getLiteral("description").toString(), 70, "\n", true));
 					System.out.print("Starts at: " + initialDate.getDays() + "/" + initialDate.getMonths() + "/" + initialDate.getYears() + " "+ initialDate.timeLexicalForm());
 					if(ends != null) System.out.print(" ends at: " + finalDate.getDays() + "/" + finalDate.getMonths() + "/" + finalDate.getYears() + " " + finalDate.timeLexicalForm());
 					System.out.println("");
@@ -176,14 +231,23 @@ public class QueryProcess {
 			}
 			
 			norms = laws.get(laws.size()-1).getNorms();
-			Norm norm = new Norm(this.qs.getResource("condition").getLocalName(), this.qs.getResource("consequences").getLocalName(), this.qs.getResource("type").getLocalName()); 
+			Norm norm = new Norm(this.qs.getResource("norm").getLocalName(), this.qs.getResource("norm_applied").getLocalName(), this.qs.getResource("norm_type").getLocalName()); 
 			norms.add(norm);
 			laws.get(laws.size()-1).setNorms(norms);
 			
 			if(this.debug > 0) {
 				System.out.print("Specified by " + norm.getIndividual());
-				System.out.println(" and has the consequence of '" + norm.getConsequence() + "' type of " + norm.getConsequenceType() + "\n");
+				System.out.println(" and has the consequence of '" + norm.getConsequence() + "' of type " + norm.getConsequenceType());
 			}
+		}
+		
+		if(this.ontology.getSearchMethod() == 1) {
+			Collections.sort(laws, new Comparator<Law>(){
+				public int compare(Law l1, Law l2) {
+					return Double.compare(l1.getTextSimilarity(), l2.getTextSimilarity());
+				}
+	        });
+			Collections.reverse(laws);
 		}
 		
 		return laws;
@@ -220,9 +284,20 @@ public class QueryProcess {
 					this.qs.getLiteral("plain_value").getString(), 
 					this.qs.getResource("value_type").getLocalName()
 					);
-			consequences.add(consequence);			
+			consequences.add(consequence);
+			
+			if(this.debug > 0) {
+				System.out.println("Variable = "+this.qs.getResource("type").getLocalName());
+				System.out.println("Data = "+this.qs.getLiteral("plain_value").getString());
+				System.out.println("Data type = "+this.qs.getResource("value_type").getLocalName());
+				System.out.println("---");
+			}
 		}
 		
+		if(this.debug > 0 && consequences.size() <= 0) {
+			System.out.println("Properties values not found");
+		}
+
 		return consequences;
 	}
 	
