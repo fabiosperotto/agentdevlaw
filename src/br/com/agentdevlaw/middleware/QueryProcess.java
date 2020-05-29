@@ -106,68 +106,62 @@ public class QueryProcess {
 		if(!agentRole.isEmpty()) {
 			agentRoleFilter = "FILTER(?roles = law:" + agentRole + " || ?roles = law:allRoles) .";
 		}
-		 
-		return "SELECT * " + 
-			"WHERE {  " + 
-			"	{   " + 
-			"    ?action rdf:type law:Action . " + 
-			"    ?action law:regulatedBy ?law . " + 
-			"    ?law rdfs:comment ?description . " + 
-			"    ?law law:starts_at ?starts_at. " + 
-			"    OPTIONAL { ?law law:ends_at ?ends_at } . " +
-			"		FILTER(IF(EXISTS{ ?law law:ends_at ?ends_at }, \""+ 
-						now +"\"^^xsd:dateTime >= ?starts_at && \""+ 
-						now + "\"^^xsd:dateTime < ?ends_at , " +
-			 		"\"" + now + "\"^^xsd:dateTime >= ?starts_at )) ." +
-			"    ?law ?predicative ?norm . " + 
-			"    OPTIONAL { ?norm rdfs:comment ?norm_desc } . " + 
-			"    ?norm law:apply ?norm_applied . " + 
-			"    ?norm_applied rdf:type ?norm_type . " + 
-			"    ?norm law:relates ?roles . " +
-			"	} " + 
-			"	FILTER regex(str(?action), \""+ actionFilter +"\", \"i\") . " +
-				agentRoleFilter +
-			"	FILTER(?norm_type != owl:NamedIndividual) . " +
-			" } "
-			+ "ORDER BY ASC(?starts_at) ";
-	}
-	
-	/**
-	 * Another option to build a query to search in ontology, like the modelLegislationQuery() 
-	 * method but in this case the query focus in search inside rdfs:comment of laws instances
-	 * @param actionFilter String with a expression to filter among many laws]
-	 * @param agentRole string with the agent type (provide empty string if this doesn't matter
-	 * @return String with query structured
-	 */
-	private String modelLegislationQuerySimilarityText(String actionFilter, String agentRole) {
 		
-		String now = this.dateSchemaNow();
-		String agentRoleFilter = "FILTER(?roles = law:allRoles) .";
-		if(!agentRole.isEmpty()) {
-			agentRoleFilter = "FILTER(?roles = law:" + agentRole + " || ?roles = law:allRoles) .";
+		String queryBuilded = "";
+		
+		if(this.ontology.getSearchMethod() == 0) {
+			queryBuilded =  "SELECT * " + 
+					"WHERE {  " + 
+					"	{   " + 
+					"    ?action rdf:type law:Action . " + 
+					"    ?action law:regulatedBy ?law . " + 
+					"    ?law rdfs:comment ?description . " + 
+					"    ?law law:starts_at ?starts_at. " + 
+					"    OPTIONAL { ?law law:ends_at ?ends_at } . " +
+					"		FILTER(IF(EXISTS{ ?law law:ends_at ?ends_at }, \""+ 
+								now +"\"^^xsd:dateTime >= ?starts_at && \""+ 
+								now + "\"^^xsd:dateTime < ?ends_at , " +
+					 		"\"" + now + "\"^^xsd:dateTime >= ?starts_at )) ." +
+					"    ?law ?predicative ?norm . " + 
+					"    OPTIONAL { ?norm rdfs:comment ?norm_desc } . " + 
+					"    ?norm law:apply ?norm_applied . " + 
+					"    ?norm_applied rdf:type ?norm_type . " + 
+					"    ?norm law:relates ?roles . " +
+					"	} " + 
+					"	FILTER regex(str(?action), \""+ actionFilter +"\", \"i\") . " +
+						agentRoleFilter +
+					"	FILTER(?norm_type != owl:NamedIndividual) . " +
+					" } "
+					+ "ORDER BY ASC(?starts_at) ";
+		}
+		
+		if(this.ontology.getSearchMethod() == 1) {
+			queryBuilded = "SELECT * " + 
+					"WHERE {  " + 
+					"	{   " + 
+					"    	?law rdf:type law:Legislation . " + 
+					"    	?law rdfs:comment ?description . " + 
+					"    	?law law:starts_at ?starts_at. " + 
+					"    	OPTIONAL { ?law law:ends_at ?ends_at } . " + 
+					"		FILTER(IF(EXISTS{ ?law law:ends_at ?ends_at }, \""+ 
+								now +"\"^^xsd:dateTime >= ?starts_at && \""+ 
+								now + "\"^^xsd:dateTime < ?ends_at , " +
+					 		"\"" + now + "\"^^xsd:dateTime >= ?starts_at )) ." +
+					"    	?law ?predicative ?norm . " + 
+					" 		OPTIONAL { ?norm rdfs:comment ?norm_desc } . " +
+					"    	?norm law:apply ?norm_applied . " + 
+					"    	?norm_applied rdf:type ?norm_type .  " + 
+					"    	?norm law:relates ?roles . " + 
+					"	} " + 
+					"	FILTER regex(?description, \""+actionFilter+"\", \"i\") . " + 
+						agentRoleFilter +
+					"	FILTER(?predicative = law:specifiedBy) . " + 
+					"	FILTER(?norm_type != owl:NamedIndividual) . " + 
+					" } "
+					+ "ORDER BY ASC(?starts_at) ";
 		}
 		 
-		return "SELECT * " + 
-		"WHERE {  " + 
-		"	{   " + 
-		"    	?law rdf:type law:Legislation . " + 
-		"    	?law rdfs:comment ?description . " + 
-		"    	?law law:starts_at ?starts_at. " + 
-		"    	OPTIONAL { ?law law:ends_at ?ends_at } . " + 
-		"		FILTER(IF(EXISTS{ ?law law:ends_at ?ends_at }, \""+ now +"\"^^xsd:dateTime >= ?starts_at && \""+ now + "\"^^xsd:dateTime < ?ends_at , " +
-		 		"\"" + now + "\"^^xsd:dateTime >= ?starts_at )) ." +
-		"    	?law ?predicative ?norm . " + 
-		" 		OPTIONAL { ?norm rdfs:comment ?norm_desc } . " +
-		"    	?norm law:apply ?norm_applied . " + 
-		"    	?norm law:relates ?roles . " + 
-		"    	?norm_applied rdf:type ?norm_type .  " + 
-		"	} " + 
-		"	FILTER regex(?description, \""+actionFilter+"\", \"i\") . " + 
-			agentRoleFilter +
-		"	FILTER(?predicative = law:specifiedBy) . " + 
-		"	FILTER(?norm_type != owl:NamedIndividual) . " + 
-		" } "
-		+ "ORDER BY ASC(?starts_at) ";
+		return queryBuilded;
 	}
 	
 	
@@ -182,9 +176,7 @@ public class QueryProcess {
 		if(this.debug > 0) System.out.println("### \nSearching in all laws for action '" + action + "' for the agent type " + role + "'\n###\n");
 		action = action.replaceAll(" ", "|"); //removing spaces by the or operator improve better response from regex filters in SPARQL queries
 		
-		String query = "";
-		if(this.ontology.getSearchMethod() == 0) query = this.modelLegislationQuery(action, role);
-		if(this.ontology.getSearchMethod() == 1) query = this.modelLegislationQuerySimilarityText(action, role);
+		String query = this.modelLegislationQuery(action, role);
 
 		ResultSet dataSet = this.ontology.setup(query);
 		Resource legislation = null;
