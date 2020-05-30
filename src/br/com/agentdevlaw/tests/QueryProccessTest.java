@@ -58,6 +58,9 @@ public class QueryProccessTest {
 		
 		Law newLaw = new Law("law-1234", "Example law with activity regulations");
 		newLaw.setStartDate(OntologyDate.createDateFormat(1988, 02, 12, 00, 00, 00));
+		List<String> actions = new ArrayList<String>();
+		actions.add("activity");
+		newLaw.setActions(actions);
 		List<Norm> norms = new ArrayList<Norm>();
 		Norm newNorm = new Norm("1234-_article-X", "pay-a-fine_200-300", "PayAFine");
 		newNorm.setRole("someone");
