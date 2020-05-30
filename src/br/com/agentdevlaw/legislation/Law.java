@@ -16,6 +16,7 @@ public class Law {
 	private String startDate;
 	private String endDate = null; //sometimes a law is always valid or not expire ;)
 	private double textSimilarity = 0;
+	private List<String> actions;
 
 	public Law() {
 
@@ -73,6 +74,13 @@ public class Law {
 	public void setTextSimilarity(double textSimilarity) {
 		this.textSimilarity = textSimilarity;
 	}
-	
+
+	public List<String> getActions() {
+		return actions;
+	}
+
+	public void setActions(List<String> actions) {
+		this.actions = actions;
+	}
 
 }

@@ -324,6 +324,19 @@ public class QueryProcess {
 			query += "  law:"+ newLaw.getIndividual() +" law:ends_at '"+ newLaw.getEndDate() +"' .";
 		}
 		
+		for(int i = 0; i < newLaw.getActions().size(); i++) {
+			String ask = "ASK" + 
+					"{" + 
+					"  law:"+ newLaw.getActions().get(i) +" rdf:type law:Action .\n" + 
+					"}";
+			if(!this.ontology.askQueries(ask)) {
+				this.createIndividual(newLaw.getActions().get(i), "Action");
+				if(this.debug > 0) System.out.println("Creating new action "+newLaw.getActions().get(i));
+			}
+			
+			query += "	law:"+newLaw.getActions().get(i)+" law:regulatedBy law:"+newLaw.getIndividual() + ". ";
+		}
+		
 		List<Norm> norms = newLaw.getNorms();
 		
 		if(norms.size() > 0) {
@@ -349,7 +362,6 @@ public class QueryProcess {
 				}
 				
 				query += "  law:"+norms.get(i).getIndividual()+" rdf:type law:Norm ."
-					
 						+ "  law:"+norms.get(i).getIndividual()+" law:relates law:"+ norms.get(i).getRole() +" ."
 						+ "  law:"+ newLaw.getIndividual() +" law:specifiedBy law:"+ norms.get(i).getIndividual() +" ."
 						+ "	 law:"+ norms.get(i).getIndividual() +" law:apply law:"+ norms.get(i).getConsequence() +" .";
@@ -357,9 +369,10 @@ public class QueryProcess {
 		}
 		
 		query += "}";
-		
+
 		return query;
 	}
+	
 	
 	/**
 	 * Create a new individual inside de ontology. Check previously the ontology structure for valid concepts
