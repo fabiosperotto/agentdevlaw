@@ -2,6 +2,7 @@ package br.com.agentdevlaw;
 
 import java.util.List;
 
+import org.apache.commons.lang3.text.WordUtils;
 import br.com.agentdevlaw.legislation.Consequence;
 import br.com.agentdevlaw.legislation.Law;
 import br.com.agentdevlaw.legislation.Norm;
@@ -16,10 +17,10 @@ public class SearchLawExample {
 		ontology.setOrigin(OntologyConfigurator.MODEL);
 		
 		QueryProcess middleware = new QueryProcess(ontology);
-		middleware.setDebug(1);
+		middleware.setDebug(0);
+	
 		
-		String action = "harvesting";
-		
+		String action = "hunting animals and exports skins";	
 		List<Law> laws =  middleware.searchAction(action, "");
 		
 		
@@ -28,7 +29,11 @@ public class SearchLawExample {
 			
 		}else {
 			for(int i = 0; i < laws.size(); i++) {
-				System.out.println("Law -> " + laws.get(i).getIndividual());
+				System.out.println("\nLaw -> " + laws.get(i).getIndividual());
+				System.out.println("Description -> " + WordUtils.wrap(laws.get(i).getDescription(), 70, "\n", true));
+				
+				System.out.println(laws.get(i).getTextSimilarity()+"%");
+				
 				List<Norm> norms = laws.get(i).getNorms();
 				System.out.println("Norm -> " + norms.get(0).getIndividual());
 				for(int j = 0; j < norms.size(); j++) {
@@ -49,8 +54,7 @@ public class SearchLawExample {
 									", Data type = "+ consequences.get(w).getValueType() + "\n"
 									);
 						}
-					}
-					
+					}					
 				}
 			}
 		}

@@ -46,7 +46,7 @@ This repository is for development purposes and the [download of the last versio
 Unit tests are available in tests package (jUnit 4 is in used).
 
 
-### Generate the software component
+### Generating the software component
 Para gerar uma lib a fim de ser utilizada em outros projetos ou em plataformas de simulação de agentes, execute os passos (para Eclipse):
 1. Clique com o botão direito no projeto > Export;
 2. Dentro das opções do wizard escolha Java > Runnable JAR file
