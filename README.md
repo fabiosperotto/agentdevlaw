@@ -26,13 +26,17 @@ This repository is for development purposes and the [download of the last versio
 
 - Funciona com ontologias em arquivos OWL ou através de ontologias online (servidores SPARQL).
 - Com o modelo de ontologia legal (/ontologies), fornece métodos para encontrar normas e consequências. Procura por instâncias de leis, normas, predicados e indivíduos que expliquem as regulamentações de uma ação.
-- Fornece métodos para compreender dados e tipos de dados da ontologia
+- Fornece métodos para compreender dados e tipos de dados da ontologia.
+- O método padrão (zero ou 0) de busca configura a engine para pesquisar legislações a partir das ações do agente. Pode ser alterado o método de busca no arquivo config.properties em tempo de execução.
+- O método 1 de busca combina a ação do agente com as anotações de comentários das instâncias de Legislação, através de similaridades de texto (é utilizado a distância coseno). pode ser alterado o método de busca no arquivo config.properties em tempo de execução.
 
 ## Features
 
 - Works with ontology in OWL file or through online ontologies (SPARQL services).
 - With the legal ontology model (/ontologies), provide methods to find norms, consequences. Search for laws instances, norms, predicate and individuals that explain the regulations of any agent's action.
 - Provide methods to understand ontology data and data types.
+- The default search method (zero or 0) set the engine to search legislations from the agents' actions. The search method can be changed in config.properties file in runtime.
+- The search method 1 combines the agent action with the Legislation instance comments annotation. In this case, use the cosine distance for a better text similarity approach. The search method can be changed in config.properties file in runtime.
 
 
 ### Development Installation
