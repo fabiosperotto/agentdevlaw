@@ -38,6 +38,9 @@ This repository is for development purposes and the [download of the last versio
 - The default search method (zero or 0) set the engine to search legislations from the agents' actions. The search method can be changed in config.properties file in runtime.
 - The search method 1 combines the agent action with the Legislation instance comments annotation. In this case, use the cosine distance for a better text similarity approach. The search method can be changed in config.properties file in runtime.
 
+## Legal Ontology
+The necessary legal ontology referenced by this system is in /ontologies/agentdevlaw_english_base.owl. The file was edited using the [Protégé](https://protege.stanford.edu/) desktop version (5.2.0).
+
 
 ### Development Installation
 
